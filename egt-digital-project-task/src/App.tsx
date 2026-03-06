@@ -6,7 +6,6 @@ function App() {
 
   return (
     <>
-       <h1>Fetched Users:</h1>
        <UsersList />
     </>
   )

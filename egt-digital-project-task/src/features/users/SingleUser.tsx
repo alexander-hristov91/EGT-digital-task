@@ -1,48 +1,51 @@
 import { useState } from "react";
 import type { User } from "./userSlice";
-import { Card } from "antd";
+import { Card, Typography } from "antd";
+
+const { Text } = Typography;
 
 interface SingleUserProps {
   user: User;
 }
 
 export default function SingleUser({ user }: SingleUserProps) {
-
-  const [expanded, setExpanded] = useState<boolean>(false)
+  const [expanded, setExpanded] = useState(false);
 
   return (
     <Card
-      title={
-        <>
-      <p>{user.name} with id {user.id}</p>
-      </>
-    }
-
+      title={`${user.name} (Id: ${user.id})`}
       extra={
-        <a onClick={() => setExpanded(!expanded)} style={{ cursor: "pointer" }}>
+        <Text
+          onClick={() => setExpanded(!expanded)}
+          style={{
+            cursor: "pointer",
+            color: expanded ? "#1890ff" : "inherit",
+            fontWeight: expanded ? 600 : 400,
+          }}
+        >
           {expanded ? "Show Less" : "Show More"}
-        </a>
+        </Text>
       }
       style={{ width: 400 }}
     >
-     {expanded && (
-      <>
-      <p>Name: {user.name}</p>
-      <p>UserName: {user.username}</p>
-      <p>Email: {user.email}</p>
-      <p>Street: {user.address.street}</p>
-      <p>Suite: {user.address.suite}</p>
-      <p>City: {user.address.city}</p>
-      <p>ZipCode: {user.address.zipcode}</p>
-      <p>GeoLat: {user.address.geo.lat}</p>
-      <p>GeoLng: {user.address.geo.lng}</p>
-      <p>Phone: {user.phone}</p>
-      <p>Website: {user.website}</p>
-      <p>CompanyName: {user.company.name}</p>
-      <p>CatchPhrase: {user.company.catchPhrase}</p>
-      <p>CompanyBS: {user.company.bs}</p>
-      </>
-     )}
+      {expanded && (
+        <>
+          <p><strong>Name:</strong> {user.name}</p>
+          <p><strong>UserName:</strong> {user.username}</p>
+          <p><strong>Email:</strong> {user.email}</p>
+          <p><strong>Street:</strong> {user.address.street}</p>
+          <p><strong>Suite:</strong> {user.address.suite}</p>
+          <p><strong>City:</strong> {user.address.city}</p>
+          <p><strong>ZipCode:</strong> {user.address.zipcode}</p>
+          <p><strong>GeoLat:</strong> {user.address.geo.lat}</p>
+          <p><strong>GeoLng:</strong> {user.address.geo.lng}</p>
+          <p><strong>Phone:</strong> {user.phone}</p>
+          <p><strong>Website:</strong> {user.website}</p>
+          <p><strong>CompanyName:</strong> {user.company.name}</p>
+          <p><strong>CatchPhrase:</strong> {user.company.catchPhrase}</p>
+          <p><strong>CompanyBS:</strong> {user.company.bs}</p>
+        </>
+      )}
     </Card>
   );
 }

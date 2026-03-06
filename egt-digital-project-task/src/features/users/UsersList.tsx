@@ -25,10 +25,10 @@ export function UsersList() {
       </div>
     );
   }
-  console.log(items);
+  // console.log(items);
   return (
     <>
-      <h1>{items.length}</h1>
+      <h1>Fetched Users: {items.length}</h1>
       <div>
         {items.map((user: User) => (
           <SingleUser key={user.id} user={user} />
