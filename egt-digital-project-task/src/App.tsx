@@ -1,7 +1,6 @@
 import './App.css'
 import { UsersList } from './features/users/UsersList'
 
-
 function App() {
   
 
