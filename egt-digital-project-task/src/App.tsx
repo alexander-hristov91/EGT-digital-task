@@ -1,14 +1,16 @@
 import './App.css'
-import { UsersList } from './features/users/UsersList'
+import { Route, Routes } from "react-router-dom";
+import { UsersList } from './features/users/UsersList';
+import UserPosts from './features/posts/UserPosts';
 
 function App() {
-  
-
   return (
-    <>
-       <UsersList />
-    </>
-  )
+    <Routes>
+      <Route path='/' element={<UsersList />} />
+      <Route path='/users' element={<UsersList />} />
+      <Route path='/users/:id' element={<UserPosts />} />
+    </Routes>
+  );
 }
 
-export default App
+export default App;

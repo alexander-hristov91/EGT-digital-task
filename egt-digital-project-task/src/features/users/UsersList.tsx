@@ -1,7 +1,8 @@
 import { useEffect } from "react";
 import { useAppSelector, useAppDispatch } from "../../app/hooks";
-import { fetchUsers, type User } from "./userSlice";
+import { type User } from "./userSlice";
 import SingleUser from "./SingleUser";
+import { fetchUsers } from "./services";
 
 export function UsersList() {
   const dispatch = useAppDispatch();
