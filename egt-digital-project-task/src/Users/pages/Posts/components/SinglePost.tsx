@@ -9,11 +9,7 @@ interface SinglePostProps {
 
 export default function SinglePost({ post }: SinglePostProps) {
   return (
-    <Card 
-      title={`Post #${post.id}`} 
-      size="small"
-      style={{ marginBottom: 16 }}
-    >
+    <Card title={`Post #${post.id}`} size="small" style={{ marginBottom: 16 }}>
       <Title level={5}>{post.title}</Title>
       <Paragraph ellipsis={{ rows: 3 }}>{post.body}</Paragraph>
     </Card>

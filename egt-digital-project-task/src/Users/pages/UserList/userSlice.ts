@@ -1,7 +1,6 @@
-import { BASE_URL } from '../../shared/constants';
-import { type User, type UsersState } from './../../shared/types';
-import { createSlice, type Dispatch } from '@reduxjs/toolkit';
-
+import { BASE_URL } from "../../shared/constants";
+import { type User, type UsersState } from "./../../shared/types";
+import { createSlice, type Dispatch } from "@reduxjs/toolkit";
 
 const initialState: UsersState = {
   userItems: [],
@@ -12,7 +11,7 @@ const initialState: UsersState = {
 };
 
 const usersSlice = createSlice({
-  name: 'users',
+  name: "users",
   initialState,
   reducers: {
     fetchUsersInit(state) {
@@ -42,8 +41,12 @@ const usersSlice = createSlice({
   },
 });
 
-export const { fetchUsersInit, fetchUsersSuccess, fetchUsersFailure, resetUsersState } =
-  usersSlice.actions;
+export const {
+  fetchUsersInit,
+  fetchUsersSuccess,
+  fetchUsersFailure,
+  resetUsersState,
+} = usersSlice.actions;
 
 export const { reducer: usersReducer } = usersSlice;
 
@@ -51,21 +54,22 @@ export default usersSlice.reducer;
 
 export const selectUsers = (state: { users: UsersState }) => state.users;
 
-export const fetchUsers =
-  () => async (dispatch: Dispatch) => {
-    dispatch(fetchUsersInit());
-    try {
-      const response = await fetch(BASE_URL);
+export const fetchUsers = () => async (dispatch: Dispatch) => {
+  dispatch(fetchUsersInit());
+  try {
+    const response = await fetch(BASE_URL);
 
-      if (!response.ok) {
-        throw new Error(`Failed to fetch users: ${response.statusText}`);
-      }
-
-      const data = await response.json();
-      dispatch(fetchUsersSuccess(data));
-    } catch (error) {
-      dispatch(
-        fetchUsersFailure(error instanceof Error ? error.message : 'Failed to fetch users'),
-      );
+    if (!response.ok) {
+      throw new Error(`Failed to fetch users: ${response.statusText}`);
     }
-  };
+
+    const data = await response.json();
+    dispatch(fetchUsersSuccess(data));
+  } catch (error) {
+    dispatch(
+      fetchUsersFailure(
+        error instanceof Error ? error.message : "Failed to fetch users",
+      ),
+    );
+  }
+};

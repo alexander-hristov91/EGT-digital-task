@@ -1,8 +1,7 @@
-import { USER_POSTS } from '../../shared/constants';
-import { type PostsState } from './../../shared/types';
+import { USER_POSTS } from "../../shared/constants";
+import { type PostsState } from "./../../shared/types";
 
-import { createSlice, type Dispatch } from '@reduxjs/toolkit';
-
+import { createSlice, type Dispatch } from "@reduxjs/toolkit";
 
 const initialState: PostsState = {
   postsItems: [],
@@ -12,7 +11,7 @@ const initialState: PostsState = {
 };
 
 const postsSlice = createSlice({
-  name: 'posts',
+  name: "posts",
   initialState,
   reducers: {
     fetchPostsInit(state) {
@@ -35,8 +34,12 @@ const postsSlice = createSlice({
   },
 });
 
-export const { fetchPostsInit, fetchPostsSuccess, fetchPostsFailure, resetPostsState } =
-  postsSlice.actions;
+export const {
+  fetchPostsInit,
+  fetchPostsSuccess,
+  fetchPostsFailure,
+  resetPostsState,
+} = postsSlice.actions;
 
 export const { reducer: postsReducer } = postsSlice;
 
@@ -48,9 +51,7 @@ export const fetchPostsByUserId =
   (userId: number) => async (dispatch: Dispatch) => {
     dispatch(fetchPostsInit());
     try {
-      const response = await fetch(
-        USER_POSTS(userId),
-      );
+      const response = await fetch(USER_POSTS(userId));
 
       if (!response.ok) {
         throw new Error(`Failed to fetch posts: ${response.statusText}`);
@@ -60,7 +61,9 @@ export const fetchPostsByUserId =
       dispatch(fetchPostsSuccess(data));
     } catch (error) {
       dispatch(
-        fetchPostsFailure(error instanceof Error ? error.message : 'Failed to fetch posts'),
+        fetchPostsFailure(
+          error instanceof Error ? error.message : "Failed to fetch posts",
+        ),
       );
     }
   };

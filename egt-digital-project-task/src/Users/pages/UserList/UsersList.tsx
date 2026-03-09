@@ -1,9 +1,9 @@
-import { useEffect } from 'react';
-import { useAppSelector, useAppDispatch } from '../../../shared/hooks';
+import { useEffect } from "react";
+import { useAppSelector, useAppDispatch } from "../../../shared/hooks";
 
-import { fetchUsers, selectUsers } from './userSlice';
-import SingleUser from './components/SingleUser';
-import type { User } from '../../shared/types';
+import { fetchUsers, selectUsers } from "./userSlice";
+import SingleUser from "./components/SingleUser";
+import type { User } from "../../shared/types";
 
 export function UsersList() {
   const dispatch = useAppDispatch();

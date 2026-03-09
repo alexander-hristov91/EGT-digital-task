@@ -75,14 +75,13 @@ export default function SingleUser({ user }: SingleUserProps) {
         </span>
       }
       style={{ width: 1230, marginBottom: 20 }}
-     
       extra={
         <Button type="primary" onClick={handleSeePosts}>
           See Posts
         </Button>
       }
     >
-      <Collapse items={collapseItems} ghost expandIcon={() => null}/>
+      <Collapse items={collapseItems} ghost expandIcon={() => null} />
     </Card>
   );
 }
