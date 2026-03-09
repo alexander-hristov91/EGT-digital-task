@@ -1,7 +1,8 @@
 import './App.css'
 import { Route, Routes } from "react-router-dom";
-import { UsersList } from './features/users/UsersList';
-import UserPosts from './features/posts/UserPosts';
+import UserPosts from './Users/pages/Posts/UserPosts';
+import { UsersList } from './Users/pages/UserList/UsersList';
+
 
 function App() {
   return (

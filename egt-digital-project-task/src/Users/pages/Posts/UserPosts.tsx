@@ -1,4 +1,3 @@
-// features/posts/UserPosts.tsx
 import { useParams, useNavigate } from "react-router-dom";
 import { Button } from "antd";
 

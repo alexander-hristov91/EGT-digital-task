@@ -1,24 +1,25 @@
-import { useEffect } from "react";
-import { useAppSelector, useAppDispatch } from "../../app/hooks";
-import { type User } from "./userSlice";
-import SingleUser from "./SingleUser";
-import { fetchUsers } from "./services";
+import { useEffect } from 'react';
+import { useAppSelector, useAppDispatch } from '../../../shared/hooks';
+
+import { fetchUsers, selectUsers } from './userSlice';
+import SingleUser from './components/SingleUser';
+import type { User } from '../../shared/types';
 
 export function UsersList() {
   const dispatch = useAppDispatch();
-  const { items, loading, error } = useAppSelector((state) => state.users);
+  const { items, loading, error, hasFetched } = useAppSelector(selectUsers);
 
   useEffect(() => {
-    if (loading === "idle") {
+    if (!hasFetched && !loading) {
       dispatch(fetchUsers());
     }
-  }, [dispatch, loading]);
+  }, [dispatch, hasFetched, loading]);
 
-  if (loading === "pending") {
+  if (loading) {
     return <div>Loading users...</div>;
   }
 
-  if (loading === "failed") {
+  if (error) {
     return (
       <div>
         <p>Error: {error}</p>
@@ -26,7 +27,7 @@ export function UsersList() {
       </div>
     );
   }
-  // console.log(items);
+
   return (
     <>
       <h1>Fetched Users: {items.length}</h1>
