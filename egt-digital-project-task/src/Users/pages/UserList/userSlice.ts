@@ -1,9 +1,10 @@
+import { BASE_URL } from '../../shared/constants';
 import { type User, type UsersState } from './../../shared/types';
 import { createSlice, type Dispatch } from '@reduxjs/toolkit';
 
 
 const initialState: UsersState = {
-  items: [],
+  userItems: [],
   hashmap: {},
   loading: false,
   error: null,
@@ -22,7 +23,7 @@ const usersSlice = createSlice({
     fetchUsersSuccess(state, action) {
       state.loading = false;
       state.hasFetched = true;
-      state.items = action.payload;
+      state.userItems = action.payload;
       state.hashmap = action.payload.reduce(
         (acc: Record<number, User>, user: User) => {
           acc[user.id] = user;
@@ -54,7 +55,7 @@ export const fetchUsers =
   () => async (dispatch: Dispatch) => {
     dispatch(fetchUsersInit());
     try {
-      const response = await fetch('https://jsonplaceholder.typicode.com/users');
+      const response = await fetch(BASE_URL);
 
       if (!response.ok) {
         throw new Error(`Failed to fetch users: ${response.statusText}`);

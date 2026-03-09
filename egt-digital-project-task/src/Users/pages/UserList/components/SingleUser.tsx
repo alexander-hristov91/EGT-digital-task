@@ -17,7 +17,7 @@ export default function SingleUser({ user }: SingleUserProps) {
   const collapseItems = [
     {
       key: "1",
-      label: "Show All Details and Edit",
+      label: <Button>Show Details and Edit</Button>,
       children: (
         <>
           <Paragraph>
@@ -69,15 +69,20 @@ export default function SingleUser({ user }: SingleUserProps) {
 
   return (
     <Card
-      title={`${user.name} (Id: ${user.id})`}
-      style={{ width: 400, marginBottom: 16 }}
+      title={
+        <span style={{ textAlign: "center", width: "106%", display: "block" }}>
+          {user.name}
+        </span>
+      }
+      style={{ width: 1230, marginBottom: 20 }}
+     
       extra={
-        <Button type="link" onClick={handleSeePosts}>
+        <Button type="primary" onClick={handleSeePosts}>
           See Posts
         </Button>
       }
     >
-      <Collapse items={collapseItems} ghost />
+      <Collapse items={collapseItems} ghost expandIcon={() => null}/>
     </Card>
   );
 }

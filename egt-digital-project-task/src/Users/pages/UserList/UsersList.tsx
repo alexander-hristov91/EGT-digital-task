@@ -7,7 +7,7 @@ import type { User } from '../../shared/types';
 
 export function UsersList() {
   const dispatch = useAppDispatch();
-  const { items, loading, error, hasFetched } = useAppSelector(selectUsers);
+  const { userItems, loading, error, hasFetched } = useAppSelector(selectUsers);
 
   useEffect(() => {
     if (!hasFetched && !loading) {
@@ -30,9 +30,9 @@ export function UsersList() {
 
   return (
     <>
-      <h1>Fetched Users: {items.length}</h1>
+      <h2>Fetched Users: {userItems.length}</h2>
       <div>
-        {items.map((user: User) => (
+        {userItems.map((user: User) => (
           <SingleUser key={user.id} user={user} />
         ))}
       </div>
