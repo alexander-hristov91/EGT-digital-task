@@ -4,7 +4,7 @@ import { useAppSelector, useAppDispatch } from "../../../shared/hooks";
 import { fetchPostsByUserId, selectPosts, resetPostsState } from "./postsSlice";
 import { Typography, Empty, Descriptions } from "antd";
 import SinglePost from "./components/SinglePost";
-import { selectUsers } from "../UserList/userSlice";
+import { fetchUsers, selectUsers } from "../UserList/userSlice";
 import type { User } from "../../shared/types";
 import SingleUser from "../UserList/components/SingleUser";
 import { UserPostsButton } from "./components/UserPostsButton";
@@ -20,6 +20,7 @@ export default function UserPosts() {
 
   useEffect(() => {
     if (id) {
+      dispatch(fetchUsers())
       dispatch(fetchPostsByUserId(Number(id)));
     }
 
