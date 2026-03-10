@@ -10,4 +10,6 @@ export interface PostsState {
   loading: boolean;
   error: string | null;
   hasFetched: boolean;
+  updatingPostId: number | null;
+  deletingPostId: number | null;
 }
