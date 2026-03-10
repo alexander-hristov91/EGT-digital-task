@@ -7,3 +7,6 @@ export const SINGLE_USER = (userId: string | number): string =>
 
 export const USER_POSTS = (userId: string | number): string =>
   `${BASE_URL}/posts?userId=${userId}`;
+
+
+

@@ -1,18 +1,18 @@
 import { useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useAppSelector, useAppDispatch } from "../../../shared/hooks";
 import { fetchPostsByUserId, selectPosts, resetPostsState } from "./postsSlice";
-import { Typography, Button, Empty, Descriptions } from "antd";
+import { Typography, Empty, Descriptions } from "antd";
 import SinglePost from "./components/SinglePost";
 import { selectUsers } from "../UserList/userSlice";
 import type { User } from "../../shared/types";
 import SingleUser from "../UserList/components/SingleUser";
+import { UserPostsButton } from "./components/UserPostsButton";
 
 const { Title } = Typography;
 
 export default function UserPosts() {
   const { id } = useParams<{ id: string }>();
-  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { postsItems, loading, error } = useAppSelector(selectPosts);
   const { userItems } = useAppSelector(selectUsers);
@@ -39,9 +39,7 @@ export default function UserPosts() {
   if (error) {
     return (
       <div style={{ padding: 24 }}>
-        <Button onClick={() => navigate("/users")} style={{ marginBottom: 16 }}>
-          ← Back to Users
-        </Button>
+        <UserPostsButton />
         <div style={{ color: "red" }}>Error: {error}</div>
       </div>
     );
@@ -49,10 +47,7 @@ export default function UserPosts() {
 
   return (
     <div style={{ padding: 24 }}>
-      <Button onClick={() => navigate("/users")} style={{ marginBottom: 16 }}>
-        ← Back to Users
-      </Button>
-
+      <UserPostsButton />
       <Title level={2}>Posts for User {id}</Title>
 
       {currentUser && (
