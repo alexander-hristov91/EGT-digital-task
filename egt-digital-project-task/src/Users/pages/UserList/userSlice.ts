@@ -1,4 +1,4 @@
-import { BASE_URL } from "../../shared/constants";
+import { ALL_USERS } from "../../shared/constants";
 import { type User, type UsersState } from "./../../shared/types";
 import { createSlice, type Dispatch } from "@reduxjs/toolkit";
 
@@ -57,7 +57,7 @@ export const selectUsers = (state: { users: UsersState }) => state.users;
 export const fetchUsers = () => async (dispatch: Dispatch) => {
   dispatch(fetchUsersInit());
   try {
-    const response = await fetch(BASE_URL);
+    const response = await fetch(ALL_USERS);
 
     if (!response.ok) {
       throw new Error(`Failed to fetch users: ${response.statusText}`);
