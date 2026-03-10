@@ -1,7 +1,6 @@
-import { USER_POSTS } from "../../shared/constants";
-import { type PostsState } from "./../../shared/types";
-
 import { createSlice, type Dispatch } from "@reduxjs/toolkit";
+import type { PostsState } from "./types";
+import { USER_POSTS } from "./constants";
 
 const initialState: PostsState = {
   postsItems: [],

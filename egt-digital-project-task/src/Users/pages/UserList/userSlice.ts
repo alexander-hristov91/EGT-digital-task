@@ -1,6 +1,7 @@
-import { ALL_USERS } from "../../shared/constants";
-import { type User, type UsersState } from "./../../shared/types";
+import { type User } from "./../../shared/types";
 import { createSlice, type Dispatch } from "@reduxjs/toolkit";
+import type { UsersState } from "./types";
+import { ALL_USERS } from "./constants";
 
 const initialState: UsersState = {
   userItems: [],

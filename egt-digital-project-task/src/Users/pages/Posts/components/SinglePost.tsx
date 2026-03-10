@@ -1,5 +1,6 @@
 import { Card, Typography } from "antd";
-import type { Post } from "../../../shared/types";
+import type { Post } from "../types";
+
 
 const { Title, Paragraph } = Typography;
 
