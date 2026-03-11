@@ -1,155 +1,57 @@
-import { Button, Card, Input, message, Popconfirm, Typography } from "antd";
+import { Card, Typography } from "antd";
 import type { Post } from "../types";
-import { useDispatch, useSelector } from "react-redux";
-import type { AppDispatch, RootState } from "../../../../shared/store";
-import { useState } from "react";
-import { deletePost, updatePost } from "../postsSlice";
+import { usePostActions } from "../hooks/usePostActions";
+import PostActions from "./PostActions";
+import PostViewMode from "./PostViewMode";
+import PostEditMode from "./PostEditMode";
 
-
-const { Paragraph, Title } = Typography;
-const { TextArea } = Input;
+const { Title } = Typography;
 
 interface SinglePostProps {
   post: Post;
 }
 
 export default function SinglePost({ post }: SinglePostProps) {
-  const dispatch = useDispatch<AppDispatch>(); 
-
-  const updatingPostId = useSelector(
-    (state: RootState) => state.posts.updatingPostId
-  );
-  const deletingPostId = useSelector(
-    (state: RootState) => state.posts.deletingPostId
-  );
-
-  const [isEditing, setIsEditing] = useState(false);
-  const [editedTitle, setEditedTitle] = useState(post.title);
-  const [editedBody, setEditedBody] = useState(post.body);
-
-  const isUpdating = updatingPostId === post.id;
-  const isDeleting = deletingPostId === post.id;
-
-  const handleEditClick = () => {
-    setIsEditing(true);
-    setEditedTitle(post.title);
-    setEditedBody(post.body);
-  };
-
-  const handleCancelClick = () => {
-    setIsEditing(false);
-    setEditedTitle(post.title);
-    setEditedBody(post.body);
-  };
-
-  const handleSaveClick = () => {
-    if (!editedTitle.trim() || !editedBody.trim()) {
-      message.error("Title and body cannot be empty");
-      return;
-    }
-
-    dispatch(
-      updatePost({
-        id: post.id,
-        title: editedTitle,
-        body: editedBody,
-        userId: post.userId,
-      })
-    );
-   
-    message.success("Post updated successfully");
-    setIsEditing(false);
-  };
-
-  const handleDeleteConfirm = () => {
-    dispatch(deletePost(post.id));
-    message.success("Post deleted successfully");
-  };
+  const {
+    isEditing,
+    isUpdating,
+    isDeleting,
+    editedTitle,
+    editedBody,
+    setEditedTitle,
+    setEditedBody,
+    handleEditClick,
+    handleCancelClick,
+    handleSaveClick,
+    handleDeleteConfirm,
+  } = usePostActions(post);
 
   return (
     <Card
       title={<Title level={5}>{post.title}</Title>}
       style={{ width: 1230, marginBottom: 20 }}
       extra={
-        <div style={{ display: "flex", gap: 8 }}>
-          {!isEditing ? (
-            <>
-              <Button
-                type="primary"
-                onClick={handleEditClick}
-                disabled={isUpdating || isDeleting}
-              >
-                Edit
-              </Button>
-              <Popconfirm
-                title="Delete Post"
-                description="Are you sure you want to delete this post?"
-                onConfirm={handleDeleteConfirm}
-                okText="Yes"
-                cancelText="No"
-                disabled={isUpdating || isDeleting}
-              >
-                <Button
-                  danger
-                  loading={isDeleting}
-                  disabled={isUpdating || isDeleting}
-                >
-                  Delete
-                </Button>
-              </Popconfirm>
-            </>
-          ) : (
-            <>
-              <Button
-                type="primary"
-                onClick={handleSaveClick}
-                loading={isUpdating}
-                disabled={isDeleting}
-              >
-                Save
-              </Button>
-              <Button onClick={handleCancelClick} disabled={isUpdating || isDeleting}>
-                Cancel
-              </Button>
-            </>
-          )}
-        </div>
+        <PostActions
+          isEditing={isEditing}
+          isUpdating={isUpdating}
+          isDeleting={isDeleting}
+          onEdit={handleEditClick}
+          onSave={handleSaveClick}
+          onCancel={handleCancelClick}
+          onDelete={handleDeleteConfirm}
+        />
       }
     >
       {isEditing ? (
-        <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-          <div>
-            <strong>Title:</strong>
-            <Input
-              value={editedTitle}
-              onChange={(e) => setEditedTitle(e.target.value)}
-              style={{ marginTop: 8, width: "100%" }}
-              disabled={isUpdating}
-            />
-          </div>
-          <div>
-            <strong>Body:</strong>
-            <TextArea
-              value={editedBody}
-              onChange={(e) => setEditedBody(e.target.value)}
-              style={{ marginTop: 8, width: "100%" }}
-              rows={4}
-              disabled={isUpdating}
-            />
-          </div>
-        </div>
+        <PostEditMode
+          title={editedTitle}
+          body={editedBody}
+          onTitleChange={setEditedTitle}
+          onBodyChange={setEditedBody}
+          disabled={isUpdating}
+        />
       ) : (
-        <>
-          <Paragraph>
-            <strong>ID:</strong> {post.id}
-          </Paragraph>
-          <Paragraph>
-            <strong>Body:</strong> {post.body}
-          </Paragraph>
-          <Paragraph>
-            <strong>User ID:</strong> {post.userId}
-          </Paragraph>
-        </>
+        <PostViewMode post={post} />
       )}
     </Card>
   );
