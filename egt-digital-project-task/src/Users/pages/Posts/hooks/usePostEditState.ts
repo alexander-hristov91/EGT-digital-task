@@ -3,12 +3,16 @@ import type { Post } from "../types";
 
 export function usePostEditState(post: Post) {
   const [isEditing, setIsEditing] = useState(false);
-  const [editedTitle, setEditedTitle] = useState(post.title);
-  const [editedBody, setEditedBody] = useState(post.body);
+  const [editedPost, setEditedPost] = useState({
+    title: post.title,
+    body: post.body,
+  });
 
   const resetEditedValues = useCallback(() => {
-    setEditedTitle(post.title);
-    setEditedBody(post.body);
+    setEditedPost({
+      title: post.title,
+      body: post.body,
+    });
   }, [post.title, post.body]);
 
   const startEditing = useCallback(() => {
@@ -21,18 +25,26 @@ export function usePostEditState(post: Post) {
     resetEditedValues();
   }, [resetEditedValues]);
 
+  const setEditedTitle = useCallback((title: string) => {
+    setEditedPost((prev) => ({ ...prev, title }));
+  }, []);
+
+  const setEditedBody = useCallback((body: string) => {
+    setEditedPost((prev) => ({ ...prev, body }));
+  }, []);
+
   const stopEditing = useCallback(() => {
-  setIsEditing(false);
-}, []);
+    setIsEditing(false);
+  }, []);
 
   return {
     isEditing,
-    editedTitle,
-    editedBody,
+    editedTitle: editedPost.title,
+    editedBody: editedPost.body,
     setEditedTitle,
     setEditedBody,
     startEditing,
     cancelEditing,
-    stopEditing
+    stopEditing,
   };
 }

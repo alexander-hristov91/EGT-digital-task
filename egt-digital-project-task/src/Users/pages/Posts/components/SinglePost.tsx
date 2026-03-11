@@ -6,7 +6,7 @@ import PostViewMode from "./PostViewMode";
 import PostEditMode from "./PostEditMode";
 
 const { Title } = Typography;
-
+// edit state here
 interface SinglePostProps {
   post: Post;
 }
