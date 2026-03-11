@@ -20,24 +20,24 @@ export default function SinglePost({ post }: SinglePostProps) {
     editedBody,
     setEditedTitle,
     setEditedBody,
-    handleEditClick,
-    handleCancelClick,
+    startEditing,
+    cancelEditing,
     handleSaveClick,
     handleDeleteConfirm,
   } = usePostActions(post);
 
   return (
     <Card
-      title={<Title level={5}>{post.title}</Title>}
+      title={<Title level={5}>Post ID: {post.id}</Title>}
       style={{ width: 1230, marginBottom: 20 }}
       extra={
         <PostActions
           isEditing={isEditing}
           isUpdating={isUpdating}
           isDeleting={isDeleting}
-          onEdit={handleEditClick}
+          onEdit={startEditing}
           onSave={handleSaveClick}
-          onCancel={handleCancelClick}
+          onCancel={cancelEditing}
           onDelete={handleDeleteConfirm}
         />
       }

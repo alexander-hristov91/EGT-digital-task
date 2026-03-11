@@ -11,10 +11,10 @@ export default function PostViewMode({ post }: PostViewModeProps) {
   return (
     <>
       <Paragraph>
-        <strong>ID:</strong> {post.id}
+        <strong>Post title:</strong> {post.title}
       </Paragraph>
       <Paragraph>
-        <strong>Body:</strong> {post.body}
+        <strong>Post Body:</strong> {post.body}
       </Paragraph>
     </>
   );
