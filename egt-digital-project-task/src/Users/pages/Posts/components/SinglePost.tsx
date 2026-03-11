@@ -69,7 +69,7 @@ export default function SinglePost({ post }: SinglePostProps) {
   return (
     <Card
       title={<Title level={5}>{post.title}</Title>}
-      style={{ width: 700, marginBottom: 20 }}
+      style={{ width: 1230, marginBottom: 20 }}
       extra={
         <div style={{ display: "flex", gap: 8 }}>
           {!isEditing ? (

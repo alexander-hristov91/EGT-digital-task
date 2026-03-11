@@ -45,7 +45,7 @@ export default function UserPosts() {
       </div>
     );
   }
-  console.log(currentUser)
+  
   return (
     <div style={{ padding: 24 }}>
       <UserPostsButton />
