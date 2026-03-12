@@ -8,8 +8,6 @@ const initialState: PostsState = {
   loading: false,
   error: null,
   hasFetched: false,
-  updatingPostId: null,
-  deletingPostId: null,
 };
 
 const postsSlice = createSlice({
@@ -51,17 +49,11 @@ const postsSlice = createSlice({
   },
 });
 
-export const {
-  resetPostsState,
-} = postsSlice.actions;
+export const { resetPostsState, updatePostInList, deletePostFromList } =
+  postsSlice.actions;
 
-export const {
-  fetchPostsInit,
-  fetchPostsSuccess,
-  fetchPostsFailure,
-  updatePostInList,
-  deletePostFromList,
-} = postsSlice.actions
+export const { fetchPostsInit, fetchPostsSuccess, fetchPostsFailure } =
+  postsSlice.actions;
 
 export const { reducer: postsReducer } = postsSlice;
 

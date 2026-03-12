@@ -1,3 +1,4 @@
+import { useState, useCallback } from "react";
 import { Card, Typography } from "antd";
 import type { Post } from "../types";
 import { usePostActions } from "../hooks/usePostActions";
@@ -6,25 +7,44 @@ import PostViewMode from "./PostViewMode";
 import PostEditMode from "./PostEditMode";
 
 const { Title } = Typography;
-// edit state here
+
 interface SinglePostProps {
   post: Post;
 }
 
 export default function SinglePost({ post }: SinglePostProps) {
-  const {
-    isEditing,
-    isUpdating,
-    isDeleting,
-    editedTitle,
-    editedBody,
-    setEditedTitle,
-    setEditedBody,
-    startEditing,
-    cancelEditing,
-    handleSaveClick,
-    handleDeleteConfirm,
-  } = usePostActions(post);
+  const [isEditing, setIsEditing] = useState(false);
+  const [editedTitle, setEditedTitle] = useState(post.title);
+  const [editedBody, setEditedBody] = useState(post.body);
+
+  const resetEditedValues = useCallback(() => {
+    setEditedTitle(post.title);
+    setEditedBody(post.body);
+  }, [post.title, post.body]);
+
+  const startEditing = useCallback(() => {
+    setIsEditing(true);
+    resetEditedValues();
+  }, [resetEditedValues]);
+
+  const cancelEditing = useCallback(() => {
+    setIsEditing(false);
+    resetEditedValues();
+  }, [resetEditedValues]);
+
+  const stopEditing = useCallback(() => {
+    setIsEditing(false);
+  }, []);
+
+  const { isUpdating, isDeleting, handleSaveClick, handleDeleteConfirm } =
+    usePostActions({
+      post,
+      editedTitle,
+      editedBody,
+      setEditedTitle,
+      setEditedBody,
+      stopEditing,
+    });
 
   return (
     <Card

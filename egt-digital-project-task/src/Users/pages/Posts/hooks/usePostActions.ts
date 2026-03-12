@@ -3,19 +3,33 @@ import { useDispatch } from "react-redux";
 import { message } from "antd";
 import type { Post } from "../types";
 import type { AppDispatch } from "../../../../shared/store";
-import { SINGLE_POST } from "../constants";
 import { updatePostInList, deletePostFromList } from "../postsSlice";
-import { usePostEditState } from "./usePostEditState";
+import { SINGLE_POST } from "../constants";
 
-export function usePostActions(post: Post) {
+interface UsePostActionsProps {
+  post: Post;
+  editedTitle: string;
+  editedBody: string;
+  setEditedTitle: (title: string) => void;
+  setEditedBody: (body: string) => void;
+  stopEditing: () => void;
+}
+
+export function usePostActions({
+  post,
+  editedTitle,
+  editedBody,
+  setEditedTitle,
+  setEditedBody,
+  stopEditing,
+}: UsePostActionsProps) {
   const dispatch = useDispatch<AppDispatch>();
-  const editState = usePostEditState(post);
-  
+
   const [isUpdating, setIsUpdating] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
 
   const handleSaveClick = useCallback(async () => {
-    if (!editState.editedTitle.trim() || !editState.editedBody.trim()) {
+    if (!editedTitle.trim() || !editedBody.trim()) {
       message.error("Title and body cannot be empty");
       return;
     }
@@ -26,11 +40,13 @@ export function usePostActions(post: Post) {
         method: "PUT",
         body: JSON.stringify({
           id: post.id,
-          title: editState.editedTitle,
-          body: editState.editedBody,
+          title: editedTitle,
+          body: editedBody,
           userId: post.userId,
         }),
-        headers: { "Content-type": "application/json; charset=UTF-8" },
+        headers: {
+          "Content-type": "application/json; charset=UTF-8",
+        },
       });
 
       if (!response.ok) {
@@ -38,18 +54,28 @@ export function usePostActions(post: Post) {
       }
 
       const updatedPost = await response.json();
-    dispatch(updatePostInList({ post: updatedPost }));
-    message.success("Post updated successfully");
-    
-    editState.setEditedTitle(updatedPost.title);
-    editState.setEditedBody(updatedPost.body);
-    editState.stopEditing();
+      dispatch(updatePostInList({ post: updatedPost }));
+      message.success("Post updated successfully");
+
+      setEditedTitle(updatedPost.title);
+      setEditedBody(updatedPost.body);
+      stopEditing();
     } catch (error) {
-      message.error(error instanceof Error ? error.message : "Failed to update post");
+      message.error(
+        error instanceof Error ? error.message : "Failed to update post",
+      );
     } finally {
       setIsUpdating(false);
     }
-  }, [dispatch, post, editState]);
+  }, [
+    dispatch,
+    post,
+    editedTitle,
+    editedBody,
+    setEditedTitle,
+    setEditedBody,
+    stopEditing,
+  ]);
 
   const handleDeleteConfirm = useCallback(async () => {
     setIsDeleting(true);
@@ -63,14 +89,15 @@ export function usePostActions(post: Post) {
       dispatch(deletePostFromList({ postId: post.id }));
       message.success("Post deleted successfully");
     } catch (error) {
-      message.error(error instanceof Error ? error.message : "Failed to delete post");
+      message.error(
+        error instanceof Error ? error.message : "Failed to delete post",
+      );
     } finally {
       setIsDeleting(false);
     }
   }, [dispatch, post.id]);
 
   return {
-    ...editState,
     isUpdating,
     isDeleting,
     handleSaveClick,

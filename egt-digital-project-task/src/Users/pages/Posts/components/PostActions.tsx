@@ -30,7 +30,7 @@ export default function PostActions({
         >
           Save
         </Button>
-        <Button onClick={onCancel} disabled={isUpdating || isDeleting}>
+        <Button onClick={onCancel} disabled={isUpdating}>
           Cancel
         </Button>
       </div>
@@ -39,11 +39,7 @@ export default function PostActions({
 
   return (
     <div style={{ display: "flex", gap: 8 }}>
-      <Button
-        type="primary"
-        onClick={onEdit}
-        disabled={isUpdating || isDeleting}
-      >
+      <Button type="primary" onClick={onEdit} disabled={isUpdating}>
         Edit
       </Button>
       <Popconfirm
@@ -52,13 +48,9 @@ export default function PostActions({
         onConfirm={onDelete}
         okText="Yes"
         cancelText="No"
-        disabled={isUpdating || isDeleting}
+        disabled={isUpdating}
       >
-        <Button
-          danger
-          loading={isDeleting}
-          disabled={isUpdating || isDeleting}
-        >
+        <Button danger loading={isDeleting} disabled={isUpdating}>
           Delete
         </Button>
       </Popconfirm>
