@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState } from "react";
 import { Card, Typography } from "antd";
 import type { Post } from "../types";
 import { usePostActions } from "../hooks/usePostActions";
@@ -14,33 +14,45 @@ interface SinglePostProps {
 
 export default function SinglePost({ post }: SinglePostProps) {
   const [isEditing, setIsEditing] = useState(false);
-  const [editedTitle, setEditedTitle] = useState(post.title);
-  const [editedBody, setEditedBody] = useState(post.body);
+  const [editedPost, setEditedPost] = useState({
+    title: post.title,
+    body: post.body,
+  });
 
-  const resetEditedValues = useCallback(() => {
-    setEditedTitle(post.title);
-    setEditedBody(post.body);
-  }, [post.title, post.body]);
+  const resetEditedValues = () => {
+  setEditedPost({
+    title: post.title,
+    body: post.body,
+  });
+};
 
-  const startEditing = useCallback(() => {
+  const startEditing = () => {
     setIsEditing(true);
     resetEditedValues();
-  }, [resetEditedValues]);
+  }
 
-  const cancelEditing = useCallback(() => {
+  const cancelEditing = () => {
     setIsEditing(false);
     resetEditedValues();
-  }, [resetEditedValues]);
+  }
 
-  const stopEditing = useCallback(() => {
+  const stopEditing = () => {
     setIsEditing(false);
-  }, []);
+  }
+
+  const setEditedTitle = (title: string) => {
+    setEditedPost((prev) => ({ ...prev, title }));
+  }
+
+  const setEditedBody = (body: string) => {
+    setEditedPost((prev) => ({ ...prev, body }));
+  }
 
   const { isUpdating, isDeleting, handleSaveClick, handleDeleteConfirm } =
     usePostActions({
       post,
-      editedTitle,
-      editedBody,
+      editedTitle: editedPost.title,
+      editedBody: editedPost.body,
       setEditedTitle,
       setEditedBody,
       stopEditing,
@@ -64,8 +76,8 @@ export default function SinglePost({ post }: SinglePostProps) {
     >
       {isEditing ? (
         <PostEditMode
-          title={editedTitle}
-          body={editedBody}
+          title={editedPost.title}
+          body={editedPost.body}
           onTitleChange={setEditedTitle}
           onBodyChange={setEditedBody}
           disabled={isUpdating}
