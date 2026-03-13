@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 import { message } from "antd";
 import type { AppDispatch } from "../../../../shared/store";
 import { deletePostFromList } from "../postsSlice";
-import { postsApi } from "../postsApi";
+import { SINGLE_POST } from "../constants";
 
 export function usePostDelete(postId: number) {
   const dispatch = useDispatch<AppDispatch>();
@@ -12,7 +12,13 @@ export function usePostDelete(postId: number) {
   const deletePost = useCallback(async () => {
     setIsDeleting(true);
     try {
-      await postsApi.delete(postId);
+      const response = await fetch(SINGLE_POST(postId), {
+        method: "DELETE",
+      });
+
+      if (!response.ok) {
+        throw new Error(`Failed to delete post: ${response.status}`);
+      }
 
       dispatch(deletePostFromList({ postId }));
       message.success("Post deleted successfully");

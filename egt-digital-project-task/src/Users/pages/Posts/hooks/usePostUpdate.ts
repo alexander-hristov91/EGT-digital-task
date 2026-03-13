@@ -4,7 +4,7 @@ import { message } from "antd";
 import type { Post } from "../types";
 import type { AppDispatch } from "../../../../shared/store";
 import { updatePostInList } from "../postsSlice";
-import { postsApi } from "../postsApi";
+import { SINGLE_POST } from "../constants";
 
 interface UsePostUpdateProps {
   post: Post;
@@ -34,12 +34,24 @@ export function usePostUpdate({
 
     setIsUpdating(true);
     try {
-      const updatedPost = await postsApi.update({
-        id: post.id,
-        title: editedTitle,
-        body: editedBody,
-        userId: post.userId,
+      const response = await fetch(SINGLE_POST(post.id), {
+        method: "PUT",
+        body: JSON.stringify({
+          id: post.id,
+          title: editedTitle,
+          body: editedBody,
+          userId: post.userId,
+        }),
+        headers: {
+          "Content-type": "application/json; charset=UTF-8",
+        },
       });
+
+      if (!response.ok) {
+        throw new Error(`Failed to update post: ${response.statusText}`);
+      }
+
+      const updatedPost = await response.json();
 
       dispatch(updatePostInList({ post: updatedPost }));
       message.success("Post updated successfully");
