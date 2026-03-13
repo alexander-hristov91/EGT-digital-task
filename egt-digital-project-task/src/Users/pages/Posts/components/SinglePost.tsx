@@ -1,5 +1,4 @@
-// components/SinglePost.tsx
-import { useState, useCallback } from "react";
+import { useState } from "react";
 import { Card, Typography } from "antd";
 import type { Post } from "../types";
 import { usePostUpdate } from "../features/UpdatePost/usePostUpdate";
@@ -21,36 +20,35 @@ export default function SinglePost({ post }: SinglePostProps) {
     body: post.body,
   });
 
-  const resetEditedValues = useCallback(() => {
+  const resetEditedValues = () => {
     setEditedPost({
       title: post.title,
       body: post.body,
     });
-  }, [post.title, post.body]);
+  };
 
-  const startEditing = useCallback(() => {
+  const startEditing = () => {
     setIsEditing(true);
     resetEditedValues();
-  }, [resetEditedValues]);
+  };
 
-  const cancelEditing = useCallback(() => {
+  const cancelEditing = () => {
     setIsEditing(false);
     resetEditedValues();
-  }, [resetEditedValues]);
+  };
 
-  const stopEditing = useCallback(() => {
+  const stopEditing = () => {
     setIsEditing(false);
-  }, []);
+  };
 
-  const setEditedTitle = useCallback((title: string) => {
+  const setEditedTitle = (title: string) => {
     setEditedPost((prev) => ({ ...prev, title }));
-  }, []);
+  };
 
-  const setEditedBody = useCallback((body: string) => {
+  const setEditedBody = (body: string) => {
     setEditedPost((prev) => ({ ...prev, body }));
-  }, []);
+  };
 
-  // ✅ Call hooks directly (no composition hook)
   const { updatePost, isUpdating } = usePostUpdate({
     post,
     editedTitle: editedPost.title,
