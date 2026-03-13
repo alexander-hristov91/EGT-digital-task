@@ -1,7 +1,9 @@
-import { useState } from "react";
+// components/SinglePost.tsx
+import { useState, useCallback } from "react";
 import { Card, Typography } from "antd";
 import type { Post } from "../types";
-import { usePostActions } from "../hooks/usePostActions";
+import { usePostUpdate } from "../features/UpdatePost/usePostUpdate";
+import { usePostDelete } from "../features/DeletePost/usePostDelete";
 import PostActions from "./PostActions";
 import PostViewMode from "./PostViewMode";
 import PostEditMode from "./PostEditMode";
@@ -19,44 +21,50 @@ export default function SinglePost({ post }: SinglePostProps) {
     body: post.body,
   });
 
-  const resetEditedValues = () => {
-  setEditedPost({
-    title: post.title,
-    body: post.body,
-  });
-};
+  const resetEditedValues = useCallback(() => {
+    setEditedPost({
+      title: post.title,
+      body: post.body,
+    });
+  }, [post.title, post.body]);
 
-  const startEditing = () => {
+  const startEditing = useCallback(() => {
     setIsEditing(true);
     resetEditedValues();
-  }
+  }, [resetEditedValues]);
 
-  const cancelEditing = () => {
+  const cancelEditing = useCallback(() => {
     setIsEditing(false);
     resetEditedValues();
-  }
+  }, [resetEditedValues]);
 
-  const stopEditing = () => {
+  const stopEditing = useCallback(() => {
     setIsEditing(false);
-  }
+  }, []);
 
-  const setEditedTitle = (title: string) => {
+  const setEditedTitle = useCallback((title: string) => {
     setEditedPost((prev) => ({ ...prev, title }));
-  }
+  }, []);
 
-  const setEditedBody = (body: string) => {
+  const setEditedBody = useCallback((body: string) => {
     setEditedPost((prev) => ({ ...prev, body }));
-  }
+  }, []);
 
-  const { isUpdating, isDeleting, handleSaveClick, handleDeleteConfirm } =
-    usePostActions({
-      post,
-      editedTitle: editedPost.title,
-      editedBody: editedPost.body,
-      setEditedTitle,
-      setEditedBody,
-      stopEditing,
-    });
+  // ✅ Call hooks directly (no composition hook)
+  const { updatePost, isUpdating } = usePostUpdate({
+    post,
+    editedTitle: editedPost.title,
+    editedBody: editedPost.body,
+    setEditedTitle,
+    setEditedBody,
+    stopEditing,
+  });
+
+  const { deletePost, isDeleting } = usePostDelete(post.id);
+
+  const handleSaveClick = async () => {
+    await updatePost();
+  };
 
   return (
     <Card
@@ -70,7 +78,7 @@ export default function SinglePost({ post }: SinglePostProps) {
           onEdit={startEditing}
           onSave={handleSaveClick}
           onCancel={cancelEditing}
-          onDelete={handleDeleteConfirm}
+          onDelete={deletePost}
         />
       }
     >

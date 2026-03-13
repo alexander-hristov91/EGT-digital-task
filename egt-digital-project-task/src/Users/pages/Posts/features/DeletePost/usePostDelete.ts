@@ -1,9 +1,10 @@
 import { useState, useCallback } from "react";
 import { useDispatch } from "react-redux";
 import { message } from "antd";
-import type { AppDispatch } from "../../../../shared/store";
-import { deletePostFromList } from "../postsSlice";
-import { SINGLE_POST } from "../constants";
+import type { AppDispatch } from "../../../../../shared/store";
+import { SINGLE_POST } from "../../constants";
+import { deletePostFromList } from "../../postsSlice";
+
 
 export function usePostDelete(postId: number) {
   const dispatch = useDispatch<AppDispatch>();

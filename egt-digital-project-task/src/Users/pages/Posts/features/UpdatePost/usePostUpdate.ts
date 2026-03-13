@@ -1,10 +1,10 @@
 import { useState, useCallback } from "react";
 import { useDispatch } from "react-redux";
 import { message } from "antd";
-import type { Post } from "../types";
-import type { AppDispatch } from "../../../../shared/store";
-import { updatePostInList } from "../postsSlice";
-import { SINGLE_POST } from "../constants";
+import type { Post } from "../../types";
+import type { AppDispatch } from "../../../../../shared/store";
+import { updatePostInList } from "../../postsSlice";
+import { SINGLE_POST } from "../../constants";
 
 interface UsePostUpdateProps {
   post: Post;

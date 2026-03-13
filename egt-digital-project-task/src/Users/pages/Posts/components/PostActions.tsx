@@ -1,13 +1,14 @@
-import { Button, Popconfirm } from "antd";
+import { DeletePost } from "../features/DeletePost/DeletePost";
+import { UpdatePost } from "../features/UpdatePost/UpdatePost";
 
 interface PostActionsProps {
   isEditing: boolean;
   isUpdating: boolean;
   isDeleting: boolean;
   onEdit: () => void;
-  onSave: () => void;
+  onSave: () => Promise<void> | void; 
   onCancel: () => void;
-  onDelete: () => void;
+  onDelete: () => Promise<boolean>; 
 }
 
 export default function PostActions({
@@ -19,41 +20,23 @@ export default function PostActions({
   onCancel,
   onDelete,
 }: PostActionsProps) {
-  if (isEditing) {
-    return (
-      <div style={{ display: "flex", gap: 8 }}>
-        <Button
-          type="primary"
-          onClick={onSave}
-          loading={isUpdating}
-          disabled={isDeleting}
-        >
-          Save
-        </Button>
-        <Button onClick={onCancel} disabled={isUpdating}>
-          Cancel
-        </Button>
-      </div>
-    );
-  }
-
   return (
     <div style={{ display: "flex", gap: 8 }}>
-      <Button type="primary" onClick={onEdit} disabled={isUpdating}>
-        Edit
-      </Button>
-      <Popconfirm
-        title="Delete Post"
-        description="Are you sure you want to delete this post?"
-        onConfirm={onDelete}
-        okText="Yes"
-        cancelText="No"
-        disabled={isUpdating}
-      >
-        <Button danger loading={isDeleting} disabled={isUpdating}>
-          Delete
-        </Button>
-      </Popconfirm>
+      <UpdatePost
+        isEditing={isEditing}
+        isUpdating={isUpdating}
+        isDeleting={isDeleting}
+        onEdit={onEdit}
+        onSave={onSave}
+        onCancel={onCancel}
+      />
+       {!isEditing && (
+        <DeletePost
+          onDelete={onDelete}
+          isDeleting={isDeleting}
+          isUpdating={isUpdating}
+        />
+      )}
     </div>
   );
 }
