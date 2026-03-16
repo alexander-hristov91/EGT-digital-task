@@ -7,51 +7,31 @@ interface SingleUserProps {
   user: User;
 }
 
-export const SingleUserChildren = ({ user }: SingleUserProps) => {
+export const UserCard = ({ user }: SingleUserProps) => {
+  const userFields = [
+    { label: "Name", value: user.name },
+    { label: "UserName", value: user.username },
+    { label: "Email", value: user.email },
+    { label: "Street", value: user.address.street },
+    { label: "Suite", value: user.address.suite },
+    { label: "City", value: user.address.city },
+    { label: "ZipCode", value: user.address.zipcode },
+    { label: "GeoLat", value: user.address.geo.lat },
+    { label: "GeoLng", value: user.address.geo.lng },
+    { label: "Phone", value: user.phone },
+    { label: "Website", value: user.website },
+    { label: "CompanyName", value: user.company.name },
+    { label: "CatchPhrase", value: user.company.catchPhrase },
+    { label: "CompanyBS", value: user.company.bs },
+  ];
+
   return (
     <>
-      <Paragraph>
-        <strong>Name:</strong> {user.name}
-      </Paragraph>
-      <Paragraph>
-        <strong>UserName:</strong> {user.username}
-      </Paragraph>
-      <Paragraph>
-        <strong>Email:</strong> {user.email}
-      </Paragraph>
-      <Paragraph>
-        <strong>Street:</strong> {user.address.street}
-      </Paragraph>
-      <Paragraph>
-        <strong>Suite:</strong> {user.address.suite}
-      </Paragraph>
-      <Paragraph>
-        <strong>City:</strong> {user.address.city}
-      </Paragraph>
-      <Paragraph>
-        <strong>ZipCode:</strong> {user.address.zipcode}
-      </Paragraph>
-      <Paragraph>
-        <strong>GeoLat:</strong> {user.address.geo.lat}
-      </Paragraph>
-      <Paragraph>
-        <strong>GeoLng:</strong> {user.address.geo.lng}
-      </Paragraph>
-      <Paragraph>
-        <strong>Phone:</strong> {user.phone}
-      </Paragraph>
-      <Paragraph>
-        <strong>Website:</strong> {user.website}
-      </Paragraph>
-      <Paragraph>
-        <strong>CompanyName:</strong> {user.company.name}
-      </Paragraph>
-      <Paragraph>
-        <strong>CatchPhrase:</strong> {user.company.catchPhrase}
-      </Paragraph>
-      <Paragraph>
-        <strong>CompanyBS:</strong> {user.company.bs}
-      </Paragraph>
+      {userFields.map(({ label, value }) => (
+        <Paragraph key={label}>
+          <strong>{label}:</strong> {value}
+        </Paragraph>
+      ))}
     </>
   );
 };

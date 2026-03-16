@@ -1,7 +1,7 @@
 import { Card, Collapse, Button } from "antd";
 import { useNavigate } from "react-router-dom";
 import type { User } from "../../../shared/types";
-import { SingleUserChildren } from "./UserCard";
+import { UserCard } from "./UserCard";
 
 
 
@@ -20,7 +20,7 @@ export default function SingleUser({ user }: SingleUserProps) {
       key: user.id,
       label: <Button>Show Details and Edit</Button>,
       children: (
-        <SingleUserChildren user={user} />
+        <UserCard user={user} />
       ),
     },
   ];

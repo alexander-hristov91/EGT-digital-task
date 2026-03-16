@@ -20,7 +20,7 @@ const usersSlice = createSlice({
       state.error = null;
       state.hasFetched = false;
     },
-    fetchUsersSuccess(state, action) {
+    fetchUsersSuccess(state, action: { payload: User[] }) {
       state.loading = false;
       state.hasFetched = true;
       state.userItems = action.payload;

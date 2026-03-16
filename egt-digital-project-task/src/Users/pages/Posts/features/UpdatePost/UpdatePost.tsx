@@ -25,21 +25,21 @@ export function EditPost({ post, editState }: EditPostProps) {
     stopEditing,
   });
 
-  const handleSaveClick = async () => {
-    await updatePost();
-  };
+  // const handleSaveClick = async () => {
+  //   await updatePost();
+  // };
 
-  const handleCancelClick = () => {
-    stopEditing();
-  };
+  // const handleCancelClick = () => {
+  //   stopEditing();
+  // };
 
   if (isEditing) {
     return (
       <div style={{ display: "flex", gap: 8 }}>
-        <Button type="primary" onClick={handleSaveClick} loading={isUpdating}>
+        <Button type="primary" onClick={updatePost} loading={isUpdating}>
           Save
         </Button>
-        <Button onClick={handleCancelClick} disabled={isUpdating}>
+        <Button onClick={stopEditing} disabled={isUpdating}>
           Cancel
         </Button>
       </div>

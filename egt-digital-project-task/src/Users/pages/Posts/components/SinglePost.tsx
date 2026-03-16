@@ -38,14 +38,13 @@ export default function SinglePost({ post }: SinglePostProps) {
   return (
     <Card
       title={<Title level={5}>Post ID: {post.id}</Title>}
-      style={{ width: 1230, marginBottom: 20 }}
+      style={{ maxWidth: 1230, marginBottom: 20 }}
       extra={<PostActions post={post} editState={editState} />}
     >
       {isEditing ? (
         <PostEditMode
           post={editedPost}
           setEditedPost={setEditedPost}
-          disabled={false}
         />
       ) : (
         <PostViewMode post={post} />
