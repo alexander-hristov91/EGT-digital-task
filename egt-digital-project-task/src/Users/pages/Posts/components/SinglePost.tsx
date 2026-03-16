@@ -19,7 +19,7 @@ export default function SinglePost({ post }: SinglePostProps) {
     setIsEditing(true);
     setEditedPost(post);
   };
-
+//todo
   const stopEditing = (saveChanges: boolean = false) => {
     if (!saveChanges) {
       setEditedPost(post);

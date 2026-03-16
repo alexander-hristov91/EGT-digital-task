@@ -9,14 +9,12 @@ import { updatePostInList } from "../../postsSlice";
 interface UsePostEditProps {
   originalPost: Post;
   editedPost: Post;
-  setEditedPost: (post: Post) => void;
   stopEditing: () => void;
 }
 
 export function usePostEdit({
   originalPost,
   editedPost,
-  setEditedPost,
   stopEditing,
 }: UsePostEditProps) {
   const dispatch = useDispatch<AppDispatch>();
@@ -52,9 +50,7 @@ export function usePostEdit({
       dispatch(updatePostInList({ post: updatedPost }));
       message.success("Post updated successfully");
 
-      setEditedPost(updatedPost);
       stopEditing();
-      return true;
     } catch (error) {
       message.error(
         error instanceof Error ? error.message : "Failed to update post",
@@ -63,7 +59,7 @@ export function usePostEdit({
     } finally {
       setIsUpdating(false);
     }
-  }, [dispatch, originalPost, editedPost, setEditedPost, stopEditing]);
+  }, [dispatch, originalPost, editedPost, stopEditing]);
 
   return { updatePost, isUpdating };
 }

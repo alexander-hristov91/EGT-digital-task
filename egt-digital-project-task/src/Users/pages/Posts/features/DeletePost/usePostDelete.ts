@@ -23,7 +23,6 @@ export function usePostDelete(postId: number) {
 
       dispatch(deletePostFromList({ postId }));
       message.success("Post deleted successfully");
-      return true;
     } catch (error) {
       message.error(
         error instanceof Error ? error.message : "Failed to delete post",

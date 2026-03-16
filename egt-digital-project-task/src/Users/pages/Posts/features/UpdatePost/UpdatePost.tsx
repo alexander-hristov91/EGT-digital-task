@@ -8,12 +8,11 @@ interface EditPostProps {
 }
 
 export function EditPost({ post, editState }: EditPostProps) {
-  const { editedPost, setEditedPost, stopEditing } = editState;
+  const { editedPost, stopEditing } = editState;
 
   const { updatePost, isUpdating } = usePostEdit({
     originalPost: post,
     editedPost,
-    setEditedPost,
     stopEditing,
   });
 
