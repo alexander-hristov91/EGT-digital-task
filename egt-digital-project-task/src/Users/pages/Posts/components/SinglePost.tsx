@@ -15,16 +15,15 @@ export default function SinglePost({ post }: SinglePostProps) {
   const [isEditing, setIsEditing] = useState(false);
   const [editedPost, setEditedPost] = useState<Post>(post);
 
-  const resetEditedValues = () => {
+  const startEditing = () => {
+    setIsEditing(true);
     setEditedPost(post);
   };
 
-  const startEditing = () => {
-    setIsEditing(true);
-    resetEditedValues();
-  };
-
-  const stopEditing = () => {
+  const stopEditing = (saveChanges: boolean = false) => {
+    if (!saveChanges) {
+      setEditedPost(post);
+    }
     setIsEditing(false);
   };
 
