@@ -52,7 +52,7 @@ const postsSlice = createSlice({
 export const { resetPostsState, updatePostInList, deletePostFromList } =
   postsSlice.actions;
 
-export const { fetchPostsInit, fetchPostsSuccess, fetchPostsFailure } =
+const { fetchPostsInit, fetchPostsSuccess, fetchPostsFailure } =
   postsSlice.actions;
 
 export const { reducer: postsReducer } = postsSlice;

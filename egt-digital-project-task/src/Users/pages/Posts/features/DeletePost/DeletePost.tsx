@@ -6,7 +6,7 @@ interface DeletePostProps {
 }
 
 export function DeletePost({ postId }: DeletePostProps) {
-  const { deletePost, isDeleting } = usePostDelete(postId);
+  const { deletePost, loading } = usePostDelete(postId);
 
   return (
     <Popconfirm
@@ -16,7 +16,7 @@ export function DeletePost({ postId }: DeletePostProps) {
       okText="Yes"
       cancelText="No"
     >
-      <Button danger loading={isDeleting} disabled={isDeleting}>
+      <Button danger loading={loading} >
         Delete
       </Button>
     </Popconfirm>

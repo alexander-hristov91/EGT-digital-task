@@ -20,7 +20,7 @@ export function usePostEdit({
   stopEditing,
 }: UsePostEditProps) {
   const dispatch = useDispatch<AppDispatch>();
-  const [isUpdating, setIsUpdating] = useState(false);
+  const [isUpdating, setIsUpdating] = useState<boolean>(false);
 
   const updatePost = useCallback(async () => {
     if (!editedPost.title.trim() || !editedPost.body.trim()) {

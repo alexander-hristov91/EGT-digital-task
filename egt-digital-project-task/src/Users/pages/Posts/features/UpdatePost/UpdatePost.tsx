@@ -2,21 +2,22 @@ import { Button } from "antd";
 import type { Post } from "../../types";
 import { usePostEdit } from "./usePostUpdate";
 
-interface EditPostProps {
-  post: Post;
+interface EditStateProps {
+  isEditing: boolean;
   editedPost: Post;
   setEditedPost: (post: Post) => void;
-  isEditing: boolean;
   stopEditing: () => void;
+  startEditing: () => void;
 }
 
-export function EditPost({
-  post,
-  editedPost,
-  setEditedPost,
-  isEditing,
-  stopEditing,
-}: EditPostProps) {
+interface EditPostProps {
+  post: Post;
+  editState: EditStateProps;
+}
+
+export function EditPost({ post, editState }: EditPostProps) {
+  const { editedPost, setEditedPost, stopEditing, isEditing } = editState;
+
   const { updatePost, isUpdating } = usePostEdit({
     originalPost: post,
     editedPost,

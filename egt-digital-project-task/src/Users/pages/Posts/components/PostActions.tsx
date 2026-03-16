@@ -19,12 +19,9 @@ interface PostActionsProps {
 export default function PostActions({ post, editState }: PostActionsProps) {
   return (
     <div style={{ display: "flex", gap: 8 }}>
-      <EditPost
+       <EditPost
         post={post}
-        editedPost={editState.editedPost}
-        setEditedPost={editState.setEditedPost}
-        isEditing={editState.isEditing}
-        stopEditing={editState.stopEditing}
+        editState={editState}
       />
 
       {!editState.isEditing && <DeletePost postId={post.id} />}

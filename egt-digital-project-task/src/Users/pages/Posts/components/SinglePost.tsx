@@ -12,7 +12,7 @@ interface SinglePostProps {
 }
 
 export default function SinglePost({ post }: SinglePostProps) {
-  const [isEditing, setIsEditing] = useState(false);
+  const [isEditing, setIsEditing] = useState<boolean>(false);
   const [editedPost, setEditedPost] = useState<Post>(post);
 
   const startEditing = () => {

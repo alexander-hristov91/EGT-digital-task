@@ -8,10 +8,10 @@ import { deletePostFromList } from "../../postsSlice";
 
 export function usePostDelete(postId: number) {
   const dispatch = useDispatch<AppDispatch>();
-  const [isDeleting, setIsDeleting] = useState(false);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const deletePost = useCallback(async () => {
-    setIsDeleting(true);
+    setLoading(true);
     try {
       const response = await fetch(SINGLE_POST(postId), {
         method: "DELETE",
@@ -30,9 +30,9 @@ export function usePostDelete(postId: number) {
       );
       return false;
     } finally {
-      setIsDeleting(false);
+      setLoading(false);
     }
   }, [dispatch, postId]);
 
-  return { deletePost, isDeleting };
+  return { deletePost, loading };
 }
