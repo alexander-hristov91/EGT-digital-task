@@ -12,3 +12,11 @@ export interface PostsState {
   hasFetched: boolean;
 
 }
+
+export interface EditStateProps {
+  isEditing: boolean;
+  editedPost: Post;
+  setEditedPost: (post: Post) => void;
+  stopEditing: (save?: boolean) => void;
+  startEditing: () => void;
+}

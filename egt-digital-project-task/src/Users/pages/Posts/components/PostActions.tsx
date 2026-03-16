@@ -1,15 +1,9 @@
 import { Button } from "antd";
 import { DeletePost } from "../features/DeletePost/DeletePost";
-import type { Post } from "../types";
+import type { EditStateProps, Post } from "../types";
 import { EditPost } from "../features/UpdatePost/UpdatePost";
 
-interface EditStateProps {
-  isEditing: boolean;
-  editedPost: Post;
-  setEditedPost: (post: Post) => void;
-  stopEditing: () => void;
-  startEditing: () => void;
-}
+
 
 interface PostActionsProps {
   post: Post;
