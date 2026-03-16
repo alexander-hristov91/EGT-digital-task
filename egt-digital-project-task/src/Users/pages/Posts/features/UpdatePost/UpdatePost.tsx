@@ -1,43 +1,49 @@
 import { Button } from "antd";
+import type { Post } from "../../types";
+import { usePostEdit } from "./usePostUpdate";
 
 interface EditPostProps {
+  post: Post;
+  editedPost: Post;
+  setEditedPost: (post: Post) => void;
   isEditing: boolean;
-  isUpdating: boolean;
-  isDeleting: boolean;
-  onEdit: () => void;
-  onSave: () => void;
-  onCancel: () => void;
+  stopEditing: () => void;
 }
 
-export function UpdatePost({
+export function EditPost({
+  post,
+  editedPost,
+  setEditedPost,
   isEditing,
-  isUpdating,
-  isDeleting,
-  onEdit,
-  onSave,
-  onCancel,
+  stopEditing,
 }: EditPostProps) {
+  const { updatePost, isUpdating } = usePostEdit({
+    originalPost: post,
+    editedPost,
+    setEditedPost,
+    stopEditing,
+  });
+
+  const handleSaveClick = async () => {
+    await updatePost();
+  };
+
+  const handleCancelClick = () => {
+    stopEditing();
+  };
+
   if (isEditing) {
     return (
       <div style={{ display: "flex", gap: 8 }}>
-        <Button
-          type="primary"
-          onClick={onSave}
-          loading={isUpdating}
-          disabled={isDeleting}
-        >
+        <Button type="primary" onClick={handleSaveClick} loading={isUpdating}>
           Save
         </Button>
-        <Button onClick={onCancel} disabled={isUpdating || isDeleting}>
+        <Button onClick={handleCancelClick} disabled={isUpdating}>
           Cancel
         </Button>
       </div>
     );
   }
 
-  return (
-    <Button type="primary" onClick={onEdit} disabled={isUpdating || isDeleting}>
-      Edit
-    </Button>
-  );
+  return null;
 }

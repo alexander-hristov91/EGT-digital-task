@@ -1,30 +1,22 @@
 import { Button, Popconfirm } from "antd";
+import { usePostDelete } from "./usePostDelete";
 
 interface DeletePostProps {
-  onDelete: () => Promise<boolean>;
-  isDeleting: boolean;
-  isUpdating: boolean;
+  postId: number;
 }
 
-export function DeletePost({
-  onDelete,
-  isDeleting,
-  isUpdating,
-}: DeletePostProps) {
+export function DeletePost({ postId }: DeletePostProps) {
+  const { deletePost, isDeleting } = usePostDelete(postId);
+
   return (
     <Popconfirm
       title="Delete Post"
       description="Are you sure you want to delete this post?"
-      onConfirm={onDelete}
+      onConfirm={deletePost}
       okText="Yes"
       cancelText="No"
-      disabled={isUpdating}
     >
-      <Button
-        danger
-        loading={isDeleting}
-        disabled={isUpdating}
-      >
+      <Button danger loading={isDeleting} disabled={isDeleting}>
         Delete
       </Button>
     </Popconfirm>

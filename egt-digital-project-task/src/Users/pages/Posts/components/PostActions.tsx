@@ -1,41 +1,38 @@
+import { Button } from "antd";
 import { DeletePost } from "../features/DeletePost/DeletePost";
-import { UpdatePost } from "../features/UpdatePost/UpdatePost";
+import type { Post } from "../types";
+import { EditPost } from "../features/UpdatePost/UpdatePost";
 
-interface PostActionsProps {
+interface EditStateProps {
   isEditing: boolean;
-  isUpdating: boolean;
-  isDeleting: boolean;
-  onEdit: () => void;
-  onSave: () => Promise<void> | void; 
-  onCancel: () => void;
-  onDelete: () => Promise<boolean>; 
+  editedPost: Post;
+  setEditedPost: (post: Post) => void;
+  stopEditing: () => void;
+  startEditing: () => void;
 }
 
-export default function PostActions({
-  isEditing,
-  isUpdating,
-  isDeleting,
-  onEdit,
-  onSave,
-  onCancel,
-  onDelete,
-}: PostActionsProps) {
+interface PostActionsProps {
+  post: Post;
+  editState: EditStateProps;
+}
+
+export default function PostActions({ post, editState }: PostActionsProps) {
   return (
     <div style={{ display: "flex", gap: 8 }}>
-      <UpdatePost
-        isEditing={isEditing}
-        isUpdating={isUpdating}
-        isDeleting={isDeleting}
-        onEdit={onEdit}
-        onSave={onSave}
-        onCancel={onCancel}
+      <EditPost
+        post={post}
+        editedPost={editState.editedPost}
+        setEditedPost={editState.setEditedPost}
+        isEditing={editState.isEditing}
+        stopEditing={editState.stopEditing}
       />
-       {!isEditing && (
-        <DeletePost
-          onDelete={onDelete}
-          isDeleting={isDeleting}
-          isUpdating={isUpdating}
-        />
+
+      {!editState.isEditing && <DeletePost postId={post.id} />}
+
+      {!editState.isEditing && (
+        <Button type="primary" onClick={editState.startEditing}>
+          Edit
+        </Button>
       )}
     </div>
   );
