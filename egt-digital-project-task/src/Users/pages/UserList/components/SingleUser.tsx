@@ -1,7 +1,7 @@
 import { Card, Collapse, Button } from "antd";
 import { useNavigate } from "react-router-dom";
 import type { User } from "../../../shared/types";
-import { SingleUserChildren } from "./SingleUserChildren";
+import { SingleUserChildren } from "./UserCard";
 
 
 

@@ -36,6 +36,16 @@ const usersSlice = createSlice({
       state.loading = false;
       state.error = action.payload;
     },
+
+    updateUserInList(state, action: { payload: { user: User }}) {
+       const index = state.userItems.findIndex(
+        (u) => u.id === action.payload.user.id,
+       );
+       if (index !== -1) {
+        state.userItems[index] = action.payload.user;
+       }
+    },
+
     resetUsersState() {
       return initialState;
     },
@@ -47,11 +57,10 @@ export const {
   fetchUsersSuccess,
   fetchUsersFailure,
   resetUsersState,
+  updateUserInList
 } = usersSlice.actions;
 
 export const { reducer: usersReducer } = usersSlice;
-
-export default usersSlice.reducer;
 
 export const selectUsers = (state: { users: UsersState }) => state.users;
 

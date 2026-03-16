@@ -3,44 +3,40 @@ import { useDispatch } from "react-redux";
 import { message } from "antd";
 import type { Post } from "../../types";
 import type { AppDispatch } from "../../../../../shared/store";
-import { updatePostInList } from "../../postsSlice";
 import { SINGLE_POST } from "../../constants";
+import { updatePostInList } from "../../postsSlice";
 
-interface UsePostUpdateProps {
-  post: Post;
-  editedTitle: string;
-  editedBody: string;
-  setEditedTitle: (title: string) => void;
-  setEditedBody: (body: string) => void;
+interface UsePostEditProps {
+  originalPost: Post;
+  editedPost: Post;
+  setEditedPost: (post: Post) => void;
   stopEditing: () => void;
 }
 
-export function usePostUpdate({
-  post,
-  editedTitle,
-  editedBody,
-  setEditedTitle,
-  setEditedBody,
+export function usePostEdit({
+  originalPost,
+  editedPost,
+  setEditedPost,
   stopEditing,
-}: UsePostUpdateProps) {
+}: UsePostEditProps) {
   const dispatch = useDispatch<AppDispatch>();
   const [isUpdating, setIsUpdating] = useState(false);
 
   const updatePost = useCallback(async () => {
-    if (!editedTitle.trim() || !editedBody.trim()) {
+    if (!editedPost.title.trim() || !editedPost.body.trim()) {
       message.error("Title and body cannot be empty");
       return false;
     }
 
     setIsUpdating(true);
     try {
-      const response = await fetch(SINGLE_POST(post.id), {
+      const response = await fetch(SINGLE_POST(originalPost.id), {
         method: "PUT",
         body: JSON.stringify({
-          id: post.id,
-          title: editedTitle,
-          body: editedBody,
-          userId: post.userId,
+          id: originalPost.id,
+          title: editedPost.title,
+          body: editedPost.body,
+          userId: originalPost.userId,
         }),
         headers: {
           "Content-type": "application/json; charset=UTF-8",
@@ -56,8 +52,7 @@ export function usePostUpdate({
       dispatch(updatePostInList({ post: updatedPost }));
       message.success("Post updated successfully");
 
-      setEditedTitle(updatedPost.title);
-      setEditedBody(updatedPost.body);
+      setEditedPost(updatedPost);
       stopEditing();
       return true;
     } catch (error) {
@@ -68,16 +63,7 @@ export function usePostUpdate({
     } finally {
       setIsUpdating(false);
     }
-  }, [
-    dispatch,
-    post.id,
-    post.userId,
-    editedTitle,
-    editedBody,
-    setEditedTitle,
-    setEditedBody,
-    stopEditing,
-  ]);
+  }, [dispatch, originalPost, editedPost, setEditedPost, stopEditing]);
 
   return { updatePost, isUpdating };
 }
