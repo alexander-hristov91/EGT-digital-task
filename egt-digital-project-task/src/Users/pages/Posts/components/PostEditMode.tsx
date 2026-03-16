@@ -1,29 +1,34 @@
 import { Input } from "antd";
+import type { Post } from "../types";
 
 const { TextArea } = Input;
 
 interface PostEditModeProps {
-  title: string;
-  body: string;
-  onTitleChange: (value: string) => void;
-  onBodyChange: (value: string) => void;
+  post: Post;
+  setEditedPost: (post: Post) => void;
   disabled?: boolean;
 }
 
 export default function PostEditMode({
-  title,
-  body,
-  onTitleChange,
-  onBodyChange,
+  post,
+  setEditedPost,
   disabled = false,
 }: PostEditModeProps) {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = e.target;
+    setEditedPost({ ...post, [name]: value });
+  };
+
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
       <div>
         <strong>Title:</strong>
         <Input
-          value={title}
-          onChange={(e) => onTitleChange(e.target.value)}
+          name="title"
+          value={post.title}
+          onChange={handleChange}
           style={{ marginTop: 8, width: "100%" }}
           disabled={disabled}
         />
@@ -31,8 +36,9 @@ export default function PostEditMode({
       <div>
         <strong>Body:</strong>
         <TextArea
-          value={body}
-          onChange={(e) => onBodyChange(e.target.value)}
+          name="body"
+          value={post.body}
+          onChange={handleChange}
           style={{ marginTop: 8, width: "100%" }}
           rows={4}
           disabled={disabled}
