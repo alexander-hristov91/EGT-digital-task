@@ -16,7 +16,7 @@ interface EditPostProps {
 }
 
 export function EditPost({ post, editState }: EditPostProps) {
-  const { editedPost, setEditedPost, stopEditing, isEditing } = editState;
+  const { editedPost, setEditedPost, stopEditing } = editState;
 
   const { updatePost, isUpdating } = usePostEdit({
     originalPost: post,
@@ -33,18 +33,14 @@ export function EditPost({ post, editState }: EditPostProps) {
   //   stopEditing();
   // };
 
-  if (isEditing) {
-    return (
-      <div style={{ display: "flex", gap: 8 }}>
-        <Button type="primary" onClick={updatePost} loading={isUpdating}>
-          Save
-        </Button>
-        <Button onClick={stopEditing} disabled={isUpdating}>
-          Cancel
-        </Button>
-      </div>
-    );
-  }
-
-  return null;
+  return (
+    <div style={{ display: "flex", gap: 8 }}>
+      <Button type="primary" onClick={updatePost} loading={isUpdating}>
+        Save
+      </Button>
+      <Button onClick={stopEditing} disabled={isUpdating}>
+        Cancel
+      </Button>
+    </div>
+  );
 }

@@ -19,17 +19,15 @@ interface PostActionsProps {
 export default function PostActions({ post, editState }: PostActionsProps) {
   return (
     <div style={{ display: "flex", gap: 8 }}>
-       <EditPost
-        post={post}
-        editState={editState}
-      />
-
-      {!editState.isEditing && <DeletePost postId={post.id} />}
-
-      {!editState.isEditing && (
-        <Button type="primary" onClick={editState.startEditing}>
-          Edit
-        </Button>
+      {editState.isEditing ? (
+        <EditPost post={post} editState={editState} />
+      ) : (
+        <>
+          <DeletePost postId={post.id} />
+          <Button type="primary" onClick={editState.startEditing}>
+            Edit
+          </Button>
+        </>
       )}
     </div>
   );
