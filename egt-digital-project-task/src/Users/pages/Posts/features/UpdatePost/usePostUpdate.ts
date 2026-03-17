@@ -7,13 +7,11 @@ import { SINGLE_POST } from "../../constants";
 import { updatePostInList } from "../../postsSlice";
 
 interface UsePostEditProps {
-  originalPost: Post;
   editedPost: Post;
   stopEditing: () => void;
 }
 
 export function usePostEdit({
-  originalPost,
   editedPost,
   stopEditing,
 }: UsePostEditProps) {
@@ -28,13 +26,13 @@ export function usePostEdit({
 
     setIsUpdating(true);
     try {
-      const response = await fetch(SINGLE_POST(originalPost.id), {
+      const response = await fetch(SINGLE_POST(editedPost.id), {
         method: "PUT",
         body: JSON.stringify({
-          id: originalPost.id,
+          id: editedPost.id,
           title: editedPost.title,
           body: editedPost.body,
-          userId: originalPost.userId,
+          userId: editedPost.userId,
         }),
         headers: {
           "Content-type": "application/json; charset=UTF-8",
@@ -59,7 +57,7 @@ export function usePostEdit({
     } finally {
       setIsUpdating(false);
     }
-  }, [dispatch, originalPost, editedPost, stopEditing]);
+  }, [dispatch, editedPost, stopEditing]);
 
   return { updatePost, isUpdating };
 }

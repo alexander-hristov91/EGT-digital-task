@@ -6,13 +6,12 @@ const { TextArea } = Input;
 interface PostEditModeProps {
   post: Post;
   setEditedPost: (post: Post) => void;
-  disabled?: boolean;
 }
 
 export default function PostEditMode({
   post,
   setEditedPost,
-  disabled = false,
+  
 }: PostEditModeProps) {
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -30,7 +29,7 @@ export default function PostEditMode({
           value={post.title}
           onChange={handleChange}
           style={{ marginTop: 8, width: "100%" }}
-          disabled={disabled}
+          
         />
       </div>
       <div>
@@ -41,7 +40,7 @@ export default function PostEditMode({
           onChange={handleChange}
           style={{ marginTop: 8, width: "100%" }}
           rows={4}
-          disabled={disabled}
+          
         />
       </div>
     </div>

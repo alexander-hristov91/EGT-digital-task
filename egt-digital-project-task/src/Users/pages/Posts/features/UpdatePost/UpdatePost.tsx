@@ -7,22 +7,13 @@ interface EditPostProps {
   editState: EditStateProps;
 }
 
-export function EditPost({ post, editState }: EditPostProps) {
+export function EditPost({ editState }: EditPostProps) {
   const { editedPost, stopEditing } = editState;
 
   const { updatePost, isUpdating } = usePostEdit({
-    originalPost: post,
     editedPost,
     stopEditing,
   });
-
-  // const handleSaveClick = async () => {
-  //   await updatePost();
-  // };
-
-  // const handleCancelClick = () => {
-  //   stopEditing();
-  // };
 
   return (
     <div style={{ display: "flex", gap: 8 }}>
