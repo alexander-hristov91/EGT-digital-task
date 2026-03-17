@@ -19,11 +19,8 @@ export default function SinglePost({ post }: SinglePostProps) {
     setIsEditing(true);
     setEditedPost(post);
   };
-//todo
-  const stopEditing = (saveChanges: boolean = false) => {
-    if (!saveChanges) {
-      setEditedPost(post);
-    }
+
+  const stopEditing = () => {
     setIsEditing(false);
   };
 
@@ -42,10 +39,7 @@ export default function SinglePost({ post }: SinglePostProps) {
       extra={<PostActions post={post} editState={editState} />}
     >
       {isEditing ? (
-        <PostEditMode
-          post={editedPost}
-          setEditedPost={setEditedPost}
-        />
+        <PostEditMode post={editedPost} setEditedPost={setEditedPost} />
       ) : (
         <PostViewMode post={post} />
       )}
