@@ -7,3 +7,12 @@ export interface UsersState {
   error: string | null;
   hasFetched: boolean;
 }
+
+export interface EditStateProps {
+  isEditing: boolean;
+  editedUser: User;
+  setEditedUser: (user: User) => void;
+  stopEditing: (save?: boolean) => void;
+  startEditing: () => void;
+  hasChanges: boolean;
+}

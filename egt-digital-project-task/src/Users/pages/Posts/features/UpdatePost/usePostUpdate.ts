@@ -1,21 +1,17 @@
 import { useState, useCallback } from "react";
-import { useDispatch } from "react-redux";
 import { message } from "antd";
 import type { Post } from "../../types";
-import type { AppDispatch } from "../../../../../shared/store";
 import { SINGLE_POST } from "../../constants";
 import { updatePostInList } from "../../postsSlice";
+import { useAppDispatch } from "../../../../../shared/hooks";
 
 interface UsePostEditProps {
   editedPost: Post;
   stopEditing: () => void;
 }
 
-export function usePostEdit({
-  editedPost,
-  stopEditing,
-}: UsePostEditProps) {
-  const dispatch = useDispatch<AppDispatch>();
+export function usePostEdit({ editedPost, stopEditing }: UsePostEditProps) {
+  const dispatch = useAppDispatch();
   const [isUpdating, setIsUpdating] = useState<boolean>(false);
 
   const updatePost = useCallback(async () => {

@@ -1,13 +1,14 @@
-import { Typography } from "antd";
+import { Typography, Button } from "antd";
 import type { User } from "../../../shared/types";
 
 const { Paragraph } = Typography;
 
-interface SingleUserProps {
+interface UserCardProps {
   user: User;
+  onEdit: () => void;
 }
 
-export const UserCard = ({ user }: SingleUserProps) => {
+export const UserCard = ({ user, onEdit }: UserCardProps) => {
   const userFields = [
     { label: "Name", value: user.name },
     { label: "UserName", value: user.username },
@@ -16,8 +17,6 @@ export const UserCard = ({ user }: SingleUserProps) => {
     { label: "Suite", value: user.address.suite },
     { label: "City", value: user.address.city },
     { label: "ZipCode", value: user.address.zipcode },
-    { label: "GeoLat", value: user.address.geo.lat },
-    { label: "GeoLng", value: user.address.geo.lng },
     { label: "Phone", value: user.phone },
     { label: "Website", value: user.website },
     { label: "CompanyName", value: user.company.name },
@@ -26,12 +25,17 @@ export const UserCard = ({ user }: SingleUserProps) => {
   ];
 
   return (
-    <>
-      {userFields.map(({ label, value }) => (
-        <Paragraph key={label}>
-          <strong>{label}:</strong> {value}
-        </Paragraph>
-      ))}
-    </>
+    <div>
+      <div style={{ marginBottom: 16 }}>
+        {userFields.map(({ label, value }) => (
+          <Paragraph key={label} style={{ marginBottom: 8 }}>
+            <strong>{label}:</strong> {value}
+          </Paragraph>
+        ))}
+      </div>
+      <Button type="primary" onClick={onEdit}>
+        Edit
+      </Button>
+    </div>
   );
-};
+}

@@ -1,13 +1,11 @@
 import { useState, useCallback } from "react";
-import { useDispatch } from "react-redux";
 import { message } from "antd";
-import type { AppDispatch } from "../../../../../shared/store";
 import { SINGLE_POST } from "../../constants";
 import { deletePostFromList } from "../../postsSlice";
-
+import { useAppDispatch } from "../../../../../shared/hooks";
 
 export function usePostDelete(postId: number) {
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
   const [loading, setLoading] = useState<boolean>(false);
 
   const deletePost = useCallback(async () => {
