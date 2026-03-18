@@ -14,13 +14,14 @@ export function EditUser({ editState }: EditUserProps) {
     stopEditing,
   });
 
-  if (!hasChanges) {
-    return null;
-  }
-
   return (
     <div style={{ display: "flex", gap: 8, marginBottom: 16 }}>
-      <Button type="primary" onClick={updateUser} loading={isUpdating}>
+      <Button
+        type="primary"
+        onClick={updateUser}
+        loading={isUpdating}
+        disabled={!hasChanges}
+      >
         Save
       </Button>
       <Button onClick={() => stopEditing()} disabled={isUpdating}>

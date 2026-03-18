@@ -4,6 +4,7 @@ import { useAppDispatch } from "../../../../../shared/hooks";
 import { updateUserInList } from "../../userSlice";
 import { SINGLE_USER } from "../../constants";
 import type { User } from "../../../../shared/types";
+import { validateUser } from "../../utils/validateUser";
 
 interface UseUserEditProps {
   editedUser: User;
@@ -15,20 +16,18 @@ export function useUserEdit({ editedUser, stopEditing }: UseUserEditProps) {
   const [isUpdating, setIsUpdating] = useState<boolean>(false);
 
   const updateUser = useCallback(async () => {
+    const { isValid, error } = validateUser(editedUser);
+
+    if (!isValid && error) {
+      message.info('Changes are interrupted by the following errors!')
+      message.error(error);
+      return false;
+    }
     setIsUpdating(true);
     try {
       const response = await fetch(SINGLE_USER(editedUser.id), {
         method: "PATCH",
-        body: JSON.stringify({
-          id: editedUser.id,
-          name: editedUser.name,
-          username: editedUser.username,
-          email: editedUser.email,
-          phone: editedUser.phone,
-          website: editedUser.website,
-          address: editedUser.address,
-          company: editedUser.company,
-        }),
+        body: JSON.stringify(editedUser),
         headers: {
           "Content-type": "application/json; charset=UTF-8",
         },
@@ -48,7 +47,6 @@ export function useUserEdit({ editedUser, stopEditing }: UseUserEditProps) {
       message.error(
         error instanceof Error ? error.message : "Failed to update user",
       );
-      return false;
     } finally {
       setIsUpdating(false);
     }
