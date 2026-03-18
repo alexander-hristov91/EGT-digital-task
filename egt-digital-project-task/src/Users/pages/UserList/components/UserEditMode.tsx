@@ -1,6 +1,5 @@
 import { Input } from "antd";
 import type { User } from "../../../shared/types";
-import { validateUserField } from "../utils/validateUser";
 
 interface UserEditModeProps {
   user: User;
@@ -29,8 +28,6 @@ export default function UserEditMode({
   };
 
   const renderInput = (name: string, label: string, value: string) => {
-    const error = validateUserField(name, value);
-
     return (
       <div key={name} style={{ display: "flex", alignItems: "center", gap: 8 }}>
         <span style={{ width: 120, fontWeight: 600 }}>{label}:</span>
@@ -40,13 +37,7 @@ export default function UserEditMode({
           onChange={handleChange}
           size="small"
           style={{ flex: 1 }}
-          status={error ? "error" : undefined}
         />
-        {error && (
-          <span style={{ color: "#e42314", fontSize: 12, marginLeft: 8 }}>
-            {error}
-          </span>
-        )}
       </div>
     );
   };
