@@ -1,5 +1,6 @@
 import { Input } from "antd";
 import type { User } from "../../../shared/types";
+import { getUserFields, getUserFieldValue } from "../utils/userFields";
 
 interface UserEditModeProps {
   user: User;
@@ -10,11 +11,14 @@ export default function UserEditMode({
   user,
   setEditedUser,
 }: UserEditModeProps) {
+  const fields = getUserFields();
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
+    const keys = name.split(".");
 
-    if (name.includes(".")) {
-      const [parent, child] = name.split(".");
+    if (keys.length > 1) {
+      const [parent, child] = keys;
       setEditedUser({
         ...user,
         [parent]: {
@@ -27,12 +31,14 @@ export default function UserEditMode({
     }
   };
 
-  const renderInput = (name: string, label: string, value: string) => {
+  const renderInput = ({ key, label }: ReturnType<typeof getUserFields>[number]) => {
+    const value = getUserFieldValue(user, key);
+
     return (
-      <div key={name} style={{ display: "flex", alignItems: "center", gap: 8 }}>
+      <div key={key} style={{ display: "flex", alignItems: "center", gap: 8 }}>
         <span style={{ width: 120, fontWeight: 600 }}>{label}:</span>
         <Input
-          name={name}
+          name={key}
           value={value}
           onChange={handleChange}
           size="small"
@@ -44,21 +50,7 @@ export default function UserEditMode({
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-      {renderInput("username", "UserName", user.username)}
-      {renderInput("email", "Email", user.email)}
-      {renderInput("address.street", "Street", user.address.street)}
-      {renderInput("address.suite", "Suite", user.address.suite)}
-      {renderInput("address.city", "City", user.address.city)}
-      {renderInput("name", "Name", user.name)}
-      {renderInput("phone", "Phone", user.phone)}
-      {renderInput("website", "Website", user.website)}
-      {renderInput("company.name", "CompanyName", user.company.name)}
-      {renderInput(
-        "company.catchPhrase",
-        "CatchPhrase",
-        user.company.catchPhrase,
-      )}
-      {renderInput("company.bs", "CompanyBS", user.company.bs)}
+      {fields.map(renderInput)}
     </div>
   );
 }
