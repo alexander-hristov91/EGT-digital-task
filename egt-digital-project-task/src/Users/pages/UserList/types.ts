@@ -16,3 +16,10 @@ export interface EditStateProps {
   startEditing: () => void;
   hasChanges: boolean;
 }
+
+export interface UserFormConfig {
+  isEdit: boolean;
+  showDetails: boolean;
+  onToggleDetails: () => void;
+  onChange?: (user: User) => void;
+}

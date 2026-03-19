@@ -1,29 +1,36 @@
-import { Typography, Button } from "antd";
+import { useState } from "react";
 import type { User } from "../../../shared/types";
-import { getUserFields, getUserFieldValue } from "../utils/userFields";
-
-const { Paragraph } = Typography;
+import { EditUser } from "../features/UpdateUser/EditUser";
+import type { UserFormConfig } from "../types";
+import { UserForm } from "./UserForm";
 
 interface UserCardProps {
   user: User;
-  onEdit: () => void;
 }
 
-export const UserCard = ({ user, onEdit }: UserCardProps) => {
-  const fields = getUserFields();
+export const UserCard = ({ user }: UserCardProps) => {
+  const [isEdit, setIsEdit] = useState(false);
+  const [showDetails, setShowDetails] = useState(false);
+  const [editedUser, setEditedUser] = useState<User>(user);
+
+  const config: UserFormConfig = {
+    isEdit,
+    showDetails,
+    onToggleDetails: () => setShowDetails(!showDetails),
+    onChange: setEditedUser,
+  };
 
   return (
-    <div>
-      <div style={{ marginBottom: 16 }}>
-        {fields.map(({ key, label }) => (
-          <Paragraph key={key} style={{ marginBottom: 8 }}>
-            <strong>{label}:</strong> {getUserFieldValue(user, key)}
-          </Paragraph>
-        ))}
-      </div>
-      <Button type="primary" onClick={onEdit}>
-        Edit
-      </Button>
+    <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+      <UserForm user={editedUser} config={config} />
+
+      <EditUser
+        user={user}
+        editedUser={editedUser}
+        setEditedUser={setEditedUser}
+        isEdit={isEdit}
+        setIsEdit={setIsEdit}
+      />
     </div>
   );
 };
