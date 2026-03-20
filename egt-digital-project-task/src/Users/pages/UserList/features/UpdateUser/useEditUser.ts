@@ -4,7 +4,8 @@ import { useAppDispatch } from "../../../../../shared/hooks";
 import { updateUserInList } from "../../userSlice";
 import { SINGLE_USER } from "../../constants";
 import type { User } from "../../../../shared/types";
-import { validateUser } from "../../utils/validateUser";
+import { validateUserFields } from "../../utils/userFields";
+
 
 interface UseUserEditProps {
   editedUser: User;
@@ -16,11 +17,11 @@ export function useUserEdit({ editedUser, stopEditing }: UseUserEditProps) {
   const [isUpdating, setIsUpdating] = useState<boolean>(false);
 
   const updateUser = useCallback(async () => {
-    const { isValid, error } = validateUser(editedUser);
-
-    if (!isValid && error) {
-      message.info('Changes are interrupted by the following errors!')
-      message.error(error);
+    const validationErrors = validateUserFields(editedUser);
+    const errorKeys = Object.keys(validationErrors);
+    
+    if (errorKeys.length > 0) {
+      message.error(validationErrors[errorKeys[0]]); 
       return false;
     }
     setIsUpdating(true);
