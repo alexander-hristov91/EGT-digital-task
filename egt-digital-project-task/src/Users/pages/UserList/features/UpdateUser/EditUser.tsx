@@ -32,8 +32,7 @@ export function EditUser({
   });
 
   const handleSave = async () => {
-    const success = await updateUser();
-    if (success) setIsEdit(false);
+    await updateUser();
   };
 
   const handleCancel = () => {
