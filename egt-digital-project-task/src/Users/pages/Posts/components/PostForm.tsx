@@ -9,6 +9,8 @@ interface PostFormProps {
   errors?: Record<string, string>;
 }
 
+const { TextArea } = Input;
+
 export function PostForm({ post, config, errors }: PostFormProps) {
   const { isEdit, onChange } = config;
 
@@ -20,8 +22,6 @@ export function PostForm({ post, config, errors }: PostFormProps) {
     const { name, value } = e.target;
     onChange({ ...post, [name]: value });
   };
-
-  const { TextArea } = Input;
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
