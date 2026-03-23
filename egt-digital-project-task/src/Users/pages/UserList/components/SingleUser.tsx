@@ -1,13 +1,13 @@
 import { Button, Collapse, Space } from "antd";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import type { User } from "../../../shared/types";
-import { useState } from "react";
-import type { ActionsConfig } from "../types";
-import { UserForm } from "./UserForm";
 import { EditUser } from "../features/UpdateUser/EditUser";
-import { validateUserFields } from "../utils/userFields";
+import { useUserEdit } from "../features/UpdateUser/useEditUser";
+import type { ActionsConfig } from "../types";
 import { hasUserChanges } from "../utils/compareUsers";
-
+import { validateUserFields } from "../utils/userFields";
+import { UserForm } from "./UserForm";
 
 interface SingleUserProps {
   user: User;
@@ -18,29 +18,42 @@ export default function SingleUser({ user }: SingleUserProps) {
   const [isEdit, setIsEdit] = useState(false);
   const [editedUser, setEditedUser] = useState<User>(user);
 
-  const errors = validateUserFields(editedUser); 
+  const errors = validateUserFields(editedUser);
+  const hasChanged = hasUserChanges(user, editedUser);
 
-  const hasChanged = hasUserChanges(user, editedUser)
+  const { updateUser, isUpdating } = useUserEdit({
+    editedUser,
+    onSuccessCallback: () => {
+      setIsEdit(false);
+    },
+  });
 
   const config: ActionsConfig = {
     isEdit,
     onChange: setEditedUser,
   };
 
+  const handlers = {
+    onEdit: () => setIsEdit(true),
+    onSave: () => updateUser(),
+    onCancel: () => {
+      setEditedUser(user);
+      setIsEdit(false);
+    },
+  };
+
   const items = [
     {
       key: "details",
       label: <span style={{ fontSize: 16, fontWeight: 600 }}>{user.name}</span>,
-      children: <UserForm user={editedUser} config={config} errors={errors}/>,
+      children: <UserForm user={editedUser} config={config} errors={errors} />,
       extra: (
         <Space>
           <EditUser
-            user={user}
-            editedUser={editedUser}
-            setEditedUser={setEditedUser}
             isEdit={isEdit}
-            setIsEdit={setIsEdit}
             hasChanged={hasChanged}
+            isLoading={isUpdating}
+            handlers={handlers}
           />
           <Button
             type="primary"

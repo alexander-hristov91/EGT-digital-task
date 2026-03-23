@@ -1,82 +1,59 @@
 import { Button, Space } from "antd";
-import type { User } from "../../../../shared/types";
-import { useUserEdit } from "./useEditUser";
+
+interface EditUserHandlers {
+  onEdit: () => void;
+  onSave: () => void;
+  onCancel: () => void;
+}
 
 interface EditUserProps {
-  user: User;
-  editedUser: User;
-  setEditedUser: (user: User) => void;
   isEdit: boolean;
-  setIsEdit: (value: boolean) => void;
   hasChanged: boolean;
+  isLoading: boolean;
+  handlers: EditUserHandlers;
 }
 
 export function EditUser({
-  user,
-  editedUser,
-  setEditedUser,
   isEdit,
-  setIsEdit,
   hasChanged,
+  isLoading = false,
+  handlers,
 }: EditUserProps) {
-  const { updateUser, isUpdating } = useUserEdit({
-    editedUser,
-    onSuccessCallback: (updatedUser) => {
-      setIsEdit(false);
-
-      setEditedUser(updatedUser);
-    },
-  });
-
-  const handleSave = () => {
-    updateUser();
-  };
-
-  const handleCancel = () => {
-    setEditedUser(user);
-    setIsEdit(false);
-  };
-
-  const handleEdit = () => setIsEdit(true);
+  if (isEdit) {
+    return (
+      <Space>
+        <Button
+          type="primary"
+          onClick={(e) => {
+            e.stopPropagation();
+            handlers.onSave();
+          }}
+          loading={isLoading}
+          disabled={!hasChanged}
+        >
+          Save
+        </Button>
+        <Button
+          onClick={(e) => {
+            e.stopPropagation();
+            handlers.onCancel();
+          }}
+        >
+          Cancel
+        </Button>
+      </Space>
+    );
+  }
 
   return (
-    <div style={{ display: "flex", justifyContent: "center", width: "100%" }}>
-      <Space>
-        {isEdit ? (
-          <>
-            <Button
-              type="primary"
-              onClick={(e) => {
-                e.stopPropagation();
-                handleSave();
-              }}
-              loading={isUpdating}
-              disabled={!hasChanged}
-            >
-              Save
-            </Button>
-            <Button
-              onClick={(e) => {
-                e.stopPropagation();
-                handleCancel();
-              }}
-              disabled={isUpdating}
-            >
-              Cancel
-            </Button>
-          </>
-        ) : (
-          <Button
-            type="primary"
-            onClick={(e) => {
-              e.stopPropagation();
-              handleEdit();
-            }}
-          >
-            Edit
-          </Button>
-        )}
-      </Space>
-    </div>
+    <Button
+      type="primary"
+      onClick={(e) => {
+        e.stopPropagation();
+        handlers.onEdit();
+      }}
+    >
+      Edit
+    </Button>
   );
 }
