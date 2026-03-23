@@ -18,6 +18,7 @@ export function getPostFieldValue(post: Post, key: keyof Post): string {
 }
 
 export function validatePostFields(post: Post): Record<string, string> {
+
   const errors: Record<string, string> = {};
 
   if (!post.title.trim()) {

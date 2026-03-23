@@ -16,34 +16,40 @@ export default function SinglePost({ post }: SinglePostProps) {
 
   const [isEdit, setIsEdit] = useState(false);
   const [editedPost, setEditedPost] = useState<Post>(post);
+  const [validationErrors, setValidationErrors] = useState<Record<string, string>>({});
 
-  const errors = validatePostFields(editedPost);
   const hasChanged = hasPostChanges(post, editedPost);
-  const hasErrors = Object.keys(errors).length > 0;
 
   const { updatePost, isUpdating } = usePostEdit({
     editedPost,
     onSuccessCallback: () => {
       setIsEdit(false);
+      setValidationErrors({});
     },
   });
 
   const config: ActionsConfig = {
     isEdit,
     onChange: setEditedPost,
+    errors: validationErrors,
   };
 
   const handlers = {
-    onEdit: () => setIsEdit(true),
+    onEdit: () => {
+      setIsEdit(true);
+      setValidationErrors({});
+    },
     onSave: () => {
-      const validationErrors = validatePostFields(editedPost);
-      if (Object.keys(validationErrors).length === 0) {
+      const errors = validatePostFields(editedPost)
+      setValidationErrors(errors);
+      if (Object.keys(errors).length === 0) {
         updatePost();
       }
     },
     onCancel: () => {
       setEditedPost(post);
       setIsEdit(false);
+      setValidationErrors({});
     },
   };
 
@@ -55,13 +61,12 @@ export default function SinglePost({ post }: SinglePostProps) {
           Post ID: {post.id}
         </span>
       ),
-      children: <PostForm post={editedPost} config={config} errors={errors} />,
+      children: <PostForm post={editedPost} config={config} />,
       extra: (
         <Space>
           <EditPost
             isEdit={isEdit}
             hasChanged={hasChanged}
-            hasErrors={hasErrors}
             isLoading={isUpdating}
             handlers={handlers}
           />

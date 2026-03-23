@@ -11,8 +11,8 @@ interface PostFormProps {
 
 const { TextArea } = Input;
 
-export function PostForm({ post, config, errors }: PostFormProps) {
-  const { isEdit, onChange } = config;
+export function PostForm({ post, config }: PostFormProps) {
+  const { isEdit, onChange, errors } = config;
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -40,6 +40,7 @@ export function PostForm({ post, config, errors }: PostFormProps) {
                     onChange={handleChange}
                     size="small"
                     status={error ? "error" : undefined}
+                    style={{ borderColor: error ? "#e42314" : undefined }}
                     rows={4}
                   />
                 ) : (
@@ -49,6 +50,7 @@ export function PostForm({ post, config, errors }: PostFormProps) {
                     onChange={handleChange}
                     size="small"
                     status={error ? "error" : undefined}
+                    style={{ borderColor: error ? "#e42314" : undefined }}
                   />
                 )}
                 <FieldError error={error} />

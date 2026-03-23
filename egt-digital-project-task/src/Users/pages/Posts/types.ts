@@ -24,4 +24,5 @@ export interface EditStateProps {
 export interface ActionsConfig {
   isEdit: boolean;
   onChange?: (post: Post) => void;
+  errors?: Record<string, string>
 }

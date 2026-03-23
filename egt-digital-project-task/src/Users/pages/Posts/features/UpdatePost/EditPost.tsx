@@ -9,7 +9,6 @@ interface EditPostHandlers {
 interface EditPostProps {
   isEdit: boolean;
   hasChanged: boolean;
-  hasErrors?: boolean;
   isLoading: boolean;
   handlers: EditPostHandlers;
 }
@@ -17,7 +16,6 @@ interface EditPostProps {
 export function EditPost({
   isEdit,
   hasChanged,
-  hasErrors = false,
   isLoading = false,
   handlers,
 }: EditPostProps) {
@@ -31,7 +29,7 @@ export function EditPost({
             handlers.onSave();
           }}
           loading={isLoading}
-          disabled={!hasChanged || hasErrors}
+          disabled={!hasChanged}
         >
           Save
         </Button>
