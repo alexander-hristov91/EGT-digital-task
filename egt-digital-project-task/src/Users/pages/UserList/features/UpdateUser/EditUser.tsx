@@ -1,7 +1,6 @@
 import { Button, Space } from "antd";
 import { useEffect } from "react";
 import type { User } from "../../../../shared/types";
-import { hasUserChanges } from "../../utils/compareUsers";
 import { useUserEdit } from "./useEditUser";
 
 interface EditUserProps {
@@ -10,6 +9,7 @@ interface EditUserProps {
   setEditedUser: (user: User) => void;
   isEdit: boolean;
   setIsEdit: (value: boolean) => void;
+  hasChanged: boolean;
 }
 
 export function EditUser({
@@ -18,6 +18,7 @@ export function EditUser({
   setEditedUser,
   isEdit,
   setIsEdit,
+  hasChanged,
 }: EditUserProps) {
   useEffect(() => {
     setEditedUser(user);
@@ -25,14 +26,14 @@ export function EditUser({
 
   const { updateUser, isUpdating } = useUserEdit({
     editedUser,
-    stopEditing: () => {
+    onSuccessCallback: () => {
       setIsEdit(false);
       setEditedUser(user);
     },
   });
 
-  const handleSave = async () => {
-    await updateUser();
+  const handleSave = () => {
+    updateUser();
   };
 
   const handleCancel = () => {
@@ -42,8 +43,6 @@ export function EditUser({
 
   const handleEdit = () => setIsEdit(true);
 
-  const hasChanged = hasUserChanges(user, editedUser);
-
   return (
     <div style={{ display: "flex", justifyContent: "center", width: "100%" }}>
       <Space>
@@ -51,18 +50,33 @@ export function EditUser({
           <>
             <Button
               type="primary"
-              onClick={handleSave}
+              onClick={(e) => {
+                e.stopPropagation();
+                handleSave();
+              }}
               loading={isUpdating}
               disabled={!hasChanged}
             >
               Save
             </Button>
-            <Button onClick={handleCancel} disabled={isUpdating}>
+            <Button
+              onClick={(e) => {
+                e.stopPropagation();
+                handleCancel();
+              }}
+              disabled={isUpdating}
+            >
               Cancel
             </Button>
           </>
         ) : (
-          <Button type="primary" onClick={handleEdit}>
+          <Button
+            type="primary"
+            onClick={(e) => {
+              e.stopPropagation();
+              handleEdit();
+            }}
+          >
             Edit
           </Button>
         )}

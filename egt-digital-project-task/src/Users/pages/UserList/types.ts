@@ -12,14 +12,12 @@ export interface EditStateProps {
   isEditing: boolean;
   editedUser: User;
   setEditedUser: (user: User) => void;
-  stopEditing: (save?: boolean) => void;
+  onSuccessCallback: (save?: boolean) => void;
   startEditing: () => void;
   hasChanges: boolean;
 }
 
-export interface UserFormConfig {
+export interface ActionsConfig {
   isEdit: boolean;
-  showDetails: boolean;
-  onToggleDetails: () => void;
   onChange?: (user: User) => void;
 }

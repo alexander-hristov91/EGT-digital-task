@@ -53,12 +53,13 @@ export function getUserFields(): UserFieldConfig[] {
 export function getUserFieldValue(user: User, key: string): string {
   return key.split('.').reduce((acc, part) => {
     return acc[part];
+    // eslint-disable-next-line
   }, user as any);
 }
 
 export function validateUserFields(user: User): Record<string, string> {
   return getUserFields().reduce(
-    (errors, field) => {
+    (errors: Record<string, string>, field) => {
       if (!field.validation) return errors;
 
       const value = getUserFieldValue(user, field.key);
@@ -69,6 +70,6 @@ export function validateUserFields(user: User): Record<string, string> {
       }
       return errors;
     },
-    {} as Record<string, string>,
+    {},
   );
 }

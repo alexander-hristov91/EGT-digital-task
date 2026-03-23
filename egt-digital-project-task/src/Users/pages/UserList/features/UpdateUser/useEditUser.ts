@@ -6,13 +6,12 @@ import { SINGLE_USER } from "../../constants";
 import type { User } from "../../../../shared/types";
 import { validateUserFields } from "../../utils/userFields";
 
-
-interface UseUserEditProps {
+interface UseUserEditOptions {
   editedUser: User;
-  stopEditing: () => void;
+  onSuccessCallback?: () => void;
 }
 
-export function useUserEdit({ editedUser, stopEditing }: UseUserEditProps) {
+export function useUserEdit({ editedUser, onSuccessCallback }: UseUserEditOptions) {
   const dispatch = useAppDispatch();
   const [isUpdating, setIsUpdating] = useState<boolean>(false);
 
@@ -21,9 +20,10 @@ export function useUserEdit({ editedUser, stopEditing }: UseUserEditProps) {
     const errorKeys = Object.keys(validationErrors);
     
     if (errorKeys.length > 0) {
-      message.error(validationErrors[errorKeys[0]]); 
+      message.error(validationErrors[errorKeys[0]]);
       return false;
     }
+
     setIsUpdating(true);
     try {
       const response = await fetch(SINGLE_USER(editedUser.id), {
@@ -43,15 +43,17 @@ export function useUserEdit({ editedUser, stopEditing }: UseUserEditProps) {
       dispatch(updateUserInList({ user: updatedUser }));
       message.success("User updated successfully");
 
-      stopEditing();
+      onSuccessCallback?.();
+      return true;
     } catch (error) {
       message.error(
         error instanceof Error ? error.message : "Failed to update user",
       );
+      return false;
     } finally {
       setIsUpdating(false);
     }
-  }, [dispatch, editedUser, stopEditing]);
+  }, [dispatch, editedUser, onSuccessCallback]);
 
   return { updateUser, isUpdating };
 }
