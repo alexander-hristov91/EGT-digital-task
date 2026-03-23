@@ -8,17 +8,20 @@ import { validateUserFields } from "../../utils/userFields";
 
 interface UseUserEditOptions {
   editedUser: User;
-  onSuccessCallback?: () => void;
+  onSuccessCallback?: (updatedUser: User) => void;
 }
 
-export function useUserEdit({ editedUser, onSuccessCallback }: UseUserEditOptions) {
+export function useUserEdit({
+  editedUser,
+  onSuccessCallback,
+}: UseUserEditOptions) {
   const dispatch = useAppDispatch();
   const [isUpdating, setIsUpdating] = useState<boolean>(false);
 
   const updateUser = useCallback(async () => {
     const validationErrors = validateUserFields(editedUser);
     const errorKeys = Object.keys(validationErrors);
-    
+
     if (errorKeys.length > 0) {
       message.error(validationErrors[errorKeys[0]]);
       return false;
@@ -43,7 +46,7 @@ export function useUserEdit({ editedUser, onSuccessCallback }: UseUserEditOption
       dispatch(updateUserInList({ user: updatedUser }));
       message.success("User updated successfully");
 
-      onSuccessCallback?.();
+      onSuccessCallback?.(updatedUser);
       return true;
     } catch (error) {
       message.error(

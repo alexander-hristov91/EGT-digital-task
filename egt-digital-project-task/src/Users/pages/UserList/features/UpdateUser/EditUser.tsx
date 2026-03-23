@@ -1,5 +1,4 @@
 import { Button, Space } from "antd";
-import { useEffect } from "react";
 import type { User } from "../../../../shared/types";
 import { useUserEdit } from "./useEditUser";
 
@@ -20,15 +19,12 @@ export function EditUser({
   setIsEdit,
   hasChanged,
 }: EditUserProps) {
-  useEffect(() => {
-    setEditedUser(user);
-  }, [user, setEditedUser]);
-
   const { updateUser, isUpdating } = useUserEdit({
     editedUser,
-    onSuccessCallback: () => {
+    onSuccessCallback: (updatedUser) => {
       setIsEdit(false);
-      setEditedUser(user);
+
+      setEditedUser(updatedUser);
     },
   });
 
