@@ -4,7 +4,6 @@ import { useAppDispatch } from "../../../../../shared/hooks";
 import { updateUserInList } from "../../userSlice";
 import { SINGLE_USER } from "../../constants";
 import type { User } from "../../../../shared/types";
-import { validateUserFields } from "../../utils/userFields";
 
 interface UseUserEditOptions {
   editedUser: User;
@@ -19,13 +18,7 @@ export function useUserEdit({
   const [isUpdating, setIsUpdating] = useState<boolean>(false);
 
   const updateUser = useCallback(async () => {
-    const validationErrors = validateUserFields(editedUser);
-    const errorKeys = Object.keys(validationErrors);
 
-    if (errorKeys.length > 0) {
-      message.error(validationErrors[errorKeys[0]]);
-      return false;
-    }
 
     setIsUpdating(true);
     try {
@@ -47,12 +40,10 @@ export function useUserEdit({
       message.success("User updated successfully");
 
       onSuccessCallback?.(updatedUser);
-      return true;
     } catch (error) {
       message.error(
         error instanceof Error ? error.message : "Failed to update user",
       );
-      return false;
     } finally {
       setIsUpdating(false);
     }

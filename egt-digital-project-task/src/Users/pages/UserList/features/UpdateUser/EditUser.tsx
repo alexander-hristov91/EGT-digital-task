@@ -9,6 +9,7 @@ interface EditUserHandlers {
 interface EditUserProps {
   isEdit: boolean;
   hasChanged: boolean;
+  hasErrors?: boolean;
   isLoading: boolean;
   handlers: EditUserHandlers;
 }
@@ -16,6 +17,7 @@ interface EditUserProps {
 export function EditUser({
   isEdit,
   hasChanged,
+  hasErrors = false,
   isLoading = false,
   handlers,
 }: EditUserProps) {
@@ -29,7 +31,7 @@ export function EditUser({
             handlers.onSave();
           }}
           loading={isLoading}
-          disabled={!hasChanged}
+          disabled={!hasChanged || hasErrors}
         >
           Save
         </Button>

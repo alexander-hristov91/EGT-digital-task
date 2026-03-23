@@ -20,6 +20,7 @@ export default function SingleUser({ user }: SingleUserProps) {
 
   const errors = validateUserFields(editedUser);
   const hasChanged = hasUserChanges(user, editedUser);
+  const hasErrors = Object.keys(errors).length > 0;
 
   const { updateUser, isUpdating } = useUserEdit({
     editedUser,
@@ -35,7 +36,12 @@ export default function SingleUser({ user }: SingleUserProps) {
 
   const handlers = {
     onEdit: () => setIsEdit(true),
-    onSave: () => updateUser(),
+    onSave: () => {
+      const validationErrors = validateUserFields(editedUser);
+      if (Object.keys(validationErrors).length === 0) {
+        updateUser();
+      }
+    },
     onCancel: () => {
       setEditedUser(user);
       setIsEdit(false);
@@ -52,6 +58,7 @@ export default function SingleUser({ user }: SingleUserProps) {
           <EditUser
             isEdit={isEdit}
             hasChanged={hasChanged}
+            hasErrors={hasErrors}
             isLoading={isUpdating}
             handlers={handlers}
           />
