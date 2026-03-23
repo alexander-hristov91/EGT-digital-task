@@ -2,6 +2,7 @@ import { Col, Input, Row } from "antd";
 import type { User } from "../../../shared/types";
 import type { ActionsConfig } from "../types";
 import { getUserFields, getUserFieldValue } from "../utils/userFields";
+import { FieldError } from "../../../shared/FieldError";
 
 interface UserFormProps {
   user: User;
@@ -44,7 +45,6 @@ export function UserForm({ user, config, errors }: UserFormProps) {
               <div>
                 <div style={{ fontWeight: 500, marginBottom: 4 }}>
                   {label}
-                  {error && <span style={{ color: "#e42314", marginLeft: 8 }}>*</span>}
                 </div>
                 <Input
                   name={key}
@@ -53,11 +53,7 @@ export function UserForm({ user, config, errors }: UserFormProps) {
                   size="small"
                   status={error ? "error" : undefined} 
                 />
-                {error && (
-                  <div style={{ color: "#e42314", fontSize: 12, marginTop: 4 }}>
-                    {error}
-                  </div>
-                )}
+                <FieldError error={error} />
               </div>
             ) : (
               <div>

@@ -1,48 +1,79 @@
+import { Collapse, Space } from "antd";
 import { useState } from "react";
-import { Card, Typography } from "antd";
-import type { Post } from "../types";
-import PostActions from "./PostActions";
-import PostViewMode from "./PostViewMode";
-import PostEditMode from "./PostEditMode";
-
-const { Title } = Typography;
+import { EditPost } from "../features/UpdatePost/EditPost";
+import { usePostEdit } from "../features/UpdatePost/usePostEdit";
+import { DeletePost } from "../features/DeletePost/DeletePost";
+import type { ActionsConfig, Post } from "../types";
+import { hasPostChanges } from "../utils/comparePosts";
+import { validatePostFields } from "../utils/postFields";
+import { PostForm } from "./PostForm";
 
 interface SinglePostProps {
   post: Post;
 }
 
 export default function SinglePost({ post }: SinglePostProps) {
-  const [isEditing, setIsEditing] = useState<boolean>(false);
+
+  const [isEdit, setIsEdit] = useState(false);
   const [editedPost, setEditedPost] = useState<Post>(post);
 
-  const startEditing = () => {
-    setIsEditing(true);
-    setEditedPost(post);
-  };
+  const errors = validatePostFields(editedPost);
+  const hasChanged = hasPostChanges(post, editedPost);
+  const hasErrors = Object.keys(errors).length > 0;
 
-  const stopEditing = () => {
-    setIsEditing(false);
-  };
-
-  const editState = {
-    isEditing,
+  const { updatePost, isUpdating } = usePostEdit({
     editedPost,
-    setEditedPost,
-    stopEditing,
-    startEditing,
+    onSuccessCallback: () => {
+      setIsEdit(false);
+    },
+  });
+
+  const config: ActionsConfig = {
+    isEdit,
+    onChange: setEditedPost,
   };
+
+  const handlers = {
+    onEdit: () => setIsEdit(true),
+    onSave: () => {
+      const validationErrors = validatePostFields(editedPost);
+      if (Object.keys(validationErrors).length === 0) {
+        updatePost();
+      }
+    },
+    onCancel: () => {
+      setEditedPost(post);
+      setIsEdit(false);
+    },
+  };
+
+  const items = [
+    {
+      key: "details",
+      label: (
+        <span style={{ fontSize: 16, fontWeight: 600 }}>
+          Post ID: {post.id}
+        </span>
+      ),
+      children: <PostForm post={editedPost} config={config} errors={errors} />,
+      extra: (
+        <Space>
+          <EditPost
+            isEdit={isEdit}
+            hasChanged={hasChanged}
+            hasErrors={hasErrors}
+            isLoading={isUpdating}
+            handlers={handlers}
+          />
+          <DeletePost postId={post.id} />
+        </Space>
+      ),
+    },
+  ];
 
   return (
-    <Card
-      title={<Title level={5}>Post ID: {post.id}</Title>}
-      style={{ maxWidth: 1230, marginBottom: 20 }}
-      extra={<PostActions post={post} editState={editState} />}
-    >
-      {isEditing ? (
-        <PostEditMode post={editedPost} setEditedPost={setEditedPost} />
-      ) : (
-        <PostViewMode post={post} />
-      )}
-    </Card>
+    <div style={{ width: 1230, marginBottom: 20 }}>
+      <Collapse items={items} />
+    </div>
   );
 }

@@ -20,3 +20,8 @@ export interface EditStateProps {
   stopEditing: (save?: boolean) => void;
   startEditing: () => void;
 }
+
+export interface ActionsConfig {
+  isEdit: boolean;
+  onChange?: (post: Post) => void;
+}
