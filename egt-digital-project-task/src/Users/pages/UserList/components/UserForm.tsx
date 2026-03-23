@@ -6,11 +6,10 @@ import { getUserFields, getUserFieldValue } from "../utils/userFields";
 interface UserFormProps {
   user: User;
   config: ActionsConfig;
-  errors?: Record<string, string>;
 }
 
-export function UserForm({ user, config, errors }: UserFormProps) {
-  const { isEdit, onChange } = config;
+export function UserForm({ user, config }: UserFormProps) {
+  const { isEdit, onChange, errors } = config;
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!onChange) return;
@@ -36,7 +35,7 @@ export function UserForm({ user, config, errors }: UserFormProps) {
     <Row gutter={[12, 12]}>
       {getUserFields().map(({ key, label }) => {
         const value = getUserFieldValue(user, key);
-        const error = errors?.[key];  
+        const error = errors?.[key];
 
         return (
           <Col xs={24} lg={8} key={key} style={{ marginBottom: 16 }}>
@@ -51,7 +50,8 @@ export function UserForm({ user, config, errors }: UserFormProps) {
                   value={value}
                   onChange={handleChange}
                   size="small"
-                  status={error ? "error" : undefined} 
+                  status={error ? "error" : undefined}
+                  style={{ borderColor: error ? "#e42314" : undefined }}
                 />
                 {error && (
                   <div style={{ color: "#e42314", fontSize: 12, marginTop: 4 }}>
