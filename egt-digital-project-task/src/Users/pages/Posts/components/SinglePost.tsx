@@ -24,7 +24,6 @@ export default function SinglePost({ post }: SinglePostProps) {
     editedPost,
     onSuccessCallback: () => {
       setIsEdit(false);
-      setValidationErrors({});
     },
   });
 
@@ -37,7 +36,6 @@ export default function SinglePost({ post }: SinglePostProps) {
   const handlers = {
     onEdit: () => {
       setIsEdit(true);
-      setValidationErrors({});
     },
     onSave: () => {
       const errors = validatePostFields(editedPost)
