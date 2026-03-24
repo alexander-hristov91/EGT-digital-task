@@ -5,18 +5,19 @@ import { usePostEdit } from "../features/UpdatePost/usePostEdit";
 import { DeletePost } from "../features/DeletePost/DeletePost";
 import type { ActionsConfig, Post } from "../types";
 import { hasPostChanges } from "../utils/comparePosts";
-import { validatePostFields } from "../utils/postFields";
 import { PostForm } from "./PostForm";
+import { validatePostFields } from "../utils/validatePostFields";
 
 interface SinglePostProps {
   post: Post;
 }
 
 export default function SinglePost({ post }: SinglePostProps) {
-
   const [isEdit, setIsEdit] = useState(false);
   const [editedPost, setEditedPost] = useState<Post>(post);
-  const [validationErrors, setValidationErrors] = useState<Record<string, string>>({});
+  const [validationErrors, setValidationErrors] = useState<
+    Record<string, string>
+  >({});
 
   const hasChanged = hasPostChanges(post, editedPost);
 
@@ -38,7 +39,7 @@ export default function SinglePost({ post }: SinglePostProps) {
       setIsEdit(true);
     },
     onSave: () => {
-      const errors = validatePostFields(editedPost)
+      const errors = validatePostFields(editedPost);
       setValidationErrors(errors);
       if (Object.keys(errors).length === 0) {
         updatePost();

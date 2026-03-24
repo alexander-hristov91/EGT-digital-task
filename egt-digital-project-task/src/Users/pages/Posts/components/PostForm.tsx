@@ -1,15 +1,10 @@
-import { Input } from "antd";
 import type { ActionsConfig, Post } from "../types";
-import { getPostFields, getPostFieldValue } from "../utils/postFields";
-import { FieldError } from "../../../shared/FieldError";
+import { FormInputField } from "../../../shared/FormInputField";
 
 interface PostFormProps {
   post: Post;
   config: ActionsConfig;
-  errors?: Record<string, string>;
 }
-
-const { TextArea } = Input;
 
 export function PostForm({ post, config }: PostFormProps) {
   const { isEdit, onChange, errors } = config;
@@ -18,51 +13,30 @@ export function PostForm({ post, config }: PostFormProps) {
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
     if (!onChange) return;
-
     const { name, value } = e.target;
     onChange({ ...post, [name]: value });
   };
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-      {getPostFields().map(({ key, label }) => {
-        const value = getPostFieldValue(post, key);
-        const error = errors?.[key];
-
-        return (
-          <div key={key}>
-            {isEdit ? (
-              <>
-                {key === "body" ? (
-                  <TextArea
-                    name={key}
-                    value={value}
-                    onChange={handleChange}
-                    size="small"
-                    status={error ? "error" : undefined}
-                    style={{ borderColor: error ? "#e42314" : undefined }}
-                    rows={4}
-                  />
-                ) : (
-                  <Input
-                    name={key}
-                    value={value}
-                    onChange={handleChange}
-                    size="small"
-                    status={error ? "error" : undefined}
-                    style={{ borderColor: error ? "#e42314" : undefined }}
-                  />
-                )}
-                <FieldError error={error} />
-              </>
-            ) : (
-              <div>
-                <strong>{label}:</strong> <span>{value || "-"}</span>
-              </div>
-            )}
-          </div>
-        );
-      })}
+      <FormInputField
+        label="Title"
+        value={post.title}
+        name="title"
+        error={errors?.title}
+        isEdit={isEdit}
+        onChange={handleChange}
+      />
+      <FormInputField
+        label="Body"
+        value={post.body}
+        name="body"
+        error={errors?.body}
+        isEdit={isEdit}
+        onChange={handleChange}
+        isTextArea
+        rows={4}
+      />
     </div>
   );
 }

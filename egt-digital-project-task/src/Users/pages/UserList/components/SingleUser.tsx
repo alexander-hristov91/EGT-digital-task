@@ -51,7 +51,11 @@ export default function SingleUser({ user }: SingleUserProps) {
   const items = [
     {
       key: "details",
-      label: <span style={{ fontSize: 16, fontWeight: 600 }}>{user.name}</span>,
+      label: (
+        <span style={{ fontSize: 16, fontWeight: 600, color: "blue" }}>
+          {user.name}
+        </span>
+      ),
       children: <UserForm user={editedUser} config={config} errors={errors} />,
       extra: (
         <Space>
