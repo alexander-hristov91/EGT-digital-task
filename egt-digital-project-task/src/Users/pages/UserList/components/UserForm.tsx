@@ -1,7 +1,8 @@
-import { Col, Input, Row } from "antd";
+import { Col, Row } from "antd";
 import type { User } from "../../../shared/types";
 import type { ActionsConfig } from "../types";
 import { getUserFields, getUserFieldValue } from "../utils/userFields";
+import { FormInputField } from "../../../shared/FormInputField";
 
 interface UserFormProps {
   user: User;
@@ -11,7 +12,9 @@ interface UserFormProps {
 export function UserForm({ user, config }: UserFormProps) {
   const { isEdit, onChange, errors } = config;
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
     if (!onChange) return;
 
     const { name, value } = e.target;
@@ -39,31 +42,14 @@ export function UserForm({ user, config }: UserFormProps) {
 
         return (
           <Col xs={24} lg={8} key={key} style={{ marginBottom: 16 }}>
-            {isEdit ? (
-              <div>
-                <div style={{ fontWeight: 500, marginBottom: 4 }}>
-                  {label}
-                  {error && <span style={{ color: "#e42314", marginLeft: 8 }}>*</span>}
-                </div>
-                <Input
-                  name={key}
-                  value={value}
-                  onChange={handleChange}
-                  size="small"
-                  status={error ? "error" : undefined}
-                  style={{ borderColor: error ? "#e42314" : undefined }}
-                />
-                {error && (
-                  <div style={{ color: "#e42314", fontSize: 12, marginTop: 4 }}>
-                    {error}
-                  </div>
-                )}
-              </div>
-            ) : (
-              <div>
-                <strong>{label}:</strong> <span>{value || "-"}</span>
-              </div>
-            )}
+            <FormInputField
+              label={label}
+              value={value}
+              name={key}
+              error={error}
+              isEdit={isEdit}
+              onChange={handleChange}
+            />
           </Col>
         );
       })}

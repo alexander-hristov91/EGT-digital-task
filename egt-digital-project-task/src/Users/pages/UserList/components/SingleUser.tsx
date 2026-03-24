@@ -17,10 +17,12 @@ export default function SingleUser({ user }: SingleUserProps) {
   const navigate = useNavigate();
   const [isEdit, setIsEdit] = useState(false);
   const [editedUser, setEditedUser] = useState<User>(user);
-  const [validationErrors, setValidationErrors] = useState<Record<string, string>>({});
-  
+  const [validationErrors, setValidationErrors] = useState<
+    Record<string, string>
+  >({});
+
   const hasChanged = hasUserChanges(user, editedUser);
- 
+
   const { updateUser, isUpdating } = useUserEdit({
     editedUser,
     onSuccessCallback: () => {
@@ -43,7 +45,7 @@ export default function SingleUser({ user }: SingleUserProps) {
     onSave: () => {
       const errors = validateUserFields(editedUser);
       setValidationErrors(errors);
-      
+
       if (Object.keys(errors).length === 0) {
         updateUser();
       }
