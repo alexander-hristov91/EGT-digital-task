@@ -2,7 +2,7 @@ import { useState, useCallback } from "react";
 import { message } from "antd";
 import { useAppDispatch } from "../../../../../shared/hooks";
 import { updateUserInList } from "../../userSlice";
-import { SINGLE_USER } from "../../constants";
+import { SINGLE_USER_URL } from "../../constants";
 import type { User } from "../../../../shared/types";
 
 interface UseUserEditOptions {
@@ -22,7 +22,7 @@ export function useUserEdit({
 
     setIsUpdating(true);
     try {
-      const response = await fetch(SINGLE_USER(editedUser.id), {
+      const response = await fetch(SINGLE_USER_URL(editedUser.id), {
         method: "PATCH",
         body: JSON.stringify(editedUser),
         headers: {

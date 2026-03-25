@@ -10,10 +10,12 @@ interface UserFormProps {
   errors?: Record<string, string>;
 }
 
-export function UserForm({ user, config, errors }: UserFormProps) {
-  const { isEdit, onChange } = config;
+export function UserForm({ user, config }: UserFormProps) {
+  const { isEdit, onChange, errors } = config;
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
     if (!onChange) return;
 
     const { name, value } = e.target;
@@ -37,29 +39,18 @@ export function UserForm({ user, config, errors }: UserFormProps) {
     <Row gutter={[12, 12]}>
       {getUserFields().map(({ key, label }) => {
         const value = getUserFieldValue(user, key);
-        const error = errors?.[key];  
+        const error = errors?.[key];
 
         return (
           <Col xs={24} lg={8} key={key} style={{ marginBottom: 16 }}>
-            {isEdit ? (
-              <div>
-                <div style={{ fontWeight: 500, marginBottom: 4 }}>
-                  {label}
-                </div>
-                <Input
-                  name={key}
-                  value={value}
-                  onChange={handleChange}
-                  size="small"
-                  status={error ? "error" : undefined} 
-                />
-                <FieldError error={error} />
-              </div>
-            ) : (
-              <div>
-                <strong>{label}:</strong> <span>{value || "-"}</span>
-              </div>
-            )}
+            <FormInputField
+              label={label}
+              value={value}
+              name={key}
+              error={error}
+              isEdit={isEdit}
+              onChange={handleChange}
+            />
           </Col>
         );
       })}

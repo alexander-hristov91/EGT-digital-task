@@ -17,52 +17,56 @@ export default function SingleUser({ user }: SingleUserProps) {
   const navigate = useNavigate();
   const [isEdit, setIsEdit] = useState(false);
   const [editedUser, setEditedUser] = useState<User>(user);
+  const [validationErrors, setValidationErrors] = useState<
+    Record<string, string>
+  >({});
 
-  const errors = validateUserFields(editedUser);
   const hasChanged = hasUserChanges(user, editedUser);
-  const hasErrors = Object.keys(errors).length > 0;
 
   const { updateUser, isUpdating } = useUserEdit({
     editedUser,
     onSuccessCallback: () => {
       setIsEdit(false);
+      setValidationErrors({});
     },
   });
 
   const config: ActionsConfig<User> = {
     isEdit,
     onChange: setEditedUser,
+    errors: validationErrors,
   };
 
   const handlers = {
-    onEdit: () => setIsEdit(true),
+    onEdit: () => {
+      setIsEdit(true);
+      setValidationErrors({});
+    },
     onSave: () => {
-      const validationErrors = validateUserFields(editedUser);
-      if (Object.keys(validationErrors).length === 0) {
+      const errors = validateUserFields(editedUser);
+      setValidationErrors(errors);
+
+      if (Object.keys(errors).length === 0) {
         updateUser();
       }
     },
     onCancel: () => {
       setEditedUser(user);
       setIsEdit(false);
+      setValidationErrors({});
     },
   };
 
   const items = [
     {
       key: "details",
-      label: (
-        <span style={{ fontSize: 16, fontWeight: 600, color: "blue" }}>
-          {user.name}
-        </span>
-      ),
-      children: <UserForm user={editedUser} config={config} errors={errors} />,
+      label: <span style={{ fontSize: 16, fontWeight: 600 }}>{user.name}</span>,
+      children: <UserForm user={editedUser} config={config} />,
       extra: (
         <Space>
           <EditUser
             isEdit={isEdit}
             hasChanged={hasChanged}
-            hasErrors={hasErrors}
             isLoading={isUpdating}
             handlers={handlers}
           />
