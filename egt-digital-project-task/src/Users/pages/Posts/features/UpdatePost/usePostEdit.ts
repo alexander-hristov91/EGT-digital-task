@@ -1,25 +1,23 @@
-import { useState, useCallback } from "react";
+import { useState } from "react";
 import { message } from "antd";
-import type { Post } from "../../types";
-import { SINGLE_POST } from "../../constants";
-import { updatePostInList } from "../../postsSlice";
 import { useAppDispatch } from "../../../../../shared/hooks";
+import { updatePostInList } from "../../postsSlice";
+import { SINGLE_POST } from "../../constants";
+import type { Post } from "../../types";
 
-interface UsePostEditProps {
+interface UsePostEditOptions {
   editedPost: Post;
-  stopEditing: () => void;
+  onSuccessCallback?: (updatedPost: Post) => void;
 }
 
-export function usePostEdit({ editedPost, stopEditing }: UsePostEditProps) {
+export function usePostEdit({
+  editedPost,
+  onSuccessCallback,
+}: UsePostEditOptions) {
   const dispatch = useAppDispatch();
   const [isUpdating, setIsUpdating] = useState<boolean>(false);
 
-  const updatePost = useCallback(async () => {
-    if (!editedPost.title.trim() || !editedPost.body.trim()) {
-      message.error("Title and body cannot be empty");
-      return false;
-    }
-
+  const updatePost = async () => {
     setIsUpdating(true);
     try {
       const response = await fetch(SINGLE_POST(editedPost.id), {
@@ -44,16 +42,15 @@ export function usePostEdit({ editedPost, stopEditing }: UsePostEditProps) {
       dispatch(updatePostInList({ post: updatedPost }));
       message.success("Post updated successfully");
 
-      stopEditing();
+      onSuccessCallback?.(updatedPost);
     } catch (error) {
       message.error(
         error instanceof Error ? error.message : "Failed to update post",
       );
-      return false;
     } finally {
       setIsUpdating(false);
     }
-  }, [dispatch, editedPost, stopEditing]);
+  };
 
   return { updatePost, isUpdating };
 }
