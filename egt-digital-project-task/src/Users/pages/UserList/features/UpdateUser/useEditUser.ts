@@ -2,30 +2,27 @@ import { useState, useCallback } from "react";
 import { message } from "antd";
 import { useAppDispatch } from "../../../../../shared/hooks";
 import { updateUserInList } from "../../userSlice";
-import { SINGLE_USER } from "../../constants";
+import { SINGLE_USER_URL } from "../../constants";
 import type { User } from "../../../../shared/types";
-import { validateUser } from "../../utils/validateUser";
 
-interface UseUserEditProps {
+interface UseUserEditOptions {
   editedUser: User;
-  stopEditing: () => void;
+  onSuccessCallback?: (updatedUser: User) => void;
 }
 
-export function useUserEdit({ editedUser, stopEditing }: UseUserEditProps) {
+export function useUserEdit({
+  editedUser,
+  onSuccessCallback,
+}: UseUserEditOptions) {
   const dispatch = useAppDispatch();
   const [isUpdating, setIsUpdating] = useState<boolean>(false);
 
   const updateUser = useCallback(async () => {
-    const { isValid, error } = validateUser(editedUser);
 
-    if (!isValid && error) {
-      message.info('Changes are interrupted by the following errors!')
-      message.error(error);
-      return false;
-    }
+
     setIsUpdating(true);
     try {
-      const response = await fetch(SINGLE_USER(editedUser.id), {
+      const response = await fetch(SINGLE_USER_URL(editedUser.id), {
         method: "PATCH",
         body: JSON.stringify(editedUser),
         headers: {
@@ -42,7 +39,7 @@ export function useUserEdit({ editedUser, stopEditing }: UseUserEditProps) {
       dispatch(updateUserInList({ user: updatedUser }));
       message.success("User updated successfully");
 
-      stopEditing();
+      onSuccessCallback?.(updatedUser);
     } catch (error) {
       message.error(
         error instanceof Error ? error.message : "Failed to update user",
@@ -50,7 +47,7 @@ export function useUserEdit({ editedUser, stopEditing }: UseUserEditProps) {
     } finally {
       setIsUpdating(false);
     }
-  }, [dispatch, editedUser, stopEditing]);
+  }, [dispatch, editedUser, onSuccessCallback]);
 
   return { updateUser, isUpdating };
 }

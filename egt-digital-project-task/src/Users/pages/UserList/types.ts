@@ -12,7 +12,13 @@ export interface EditStateProps {
   isEditing: boolean;
   editedUser: User;
   setEditedUser: (user: User) => void;
-  stopEditing: (save?: boolean) => void;
+  onSuccessCallback: (save?: boolean) => void;
   startEditing: () => void;
   hasChanges: boolean;
+}
+
+export interface ActionsConfig {
+  isEdit: boolean;
+  onChange?: (user: User) => void;
+  errors?: Record<string, string>;
 }

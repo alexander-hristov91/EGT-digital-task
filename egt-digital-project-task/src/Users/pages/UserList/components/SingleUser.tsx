@@ -1,11 +1,13 @@
-import { Card, Collapse, Button } from "antd";
+import { Button, Collapse, Space } from "antd";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import type { User } from "../../../shared/types";
-import { UserCard } from "./UserCard";
-import { useState } from "react";
-import UserEditMode from "./UserEditMode";
-import { EditUser } from "../features/UpdateUser/UpdateUser";
+import { EditUser } from "../features/UpdateUser/EditUser";
+import { useUserEdit } from "../features/UpdateUser/useEditUser";
+import type { ActionsConfig } from "../types";
 import { hasUserChanges } from "../utils/compareUsers";
+import { validateUserFields } from "../utils/userFields";
+import { UserForm } from "./UserForm";
 
 interface SingleUserProps {
   user: User;
@@ -13,80 +15,78 @@ interface SingleUserProps {
 
 export default function SingleUser({ user }: SingleUserProps) {
   const navigate = useNavigate();
-  const [isEditing, setIsEditing] = useState<boolean>(false);
+  const [isEdit, setIsEdit] = useState(false);
   const [editedUser, setEditedUser] = useState<User>(user);
-  const [panelOpen, setPanelOpen] = useState<boolean>(false);
+  const [validationErrors, setValidationErrors] = useState<
+    Record<string, string>
+  >({});
 
-  const startEditing = () => {
-    setIsEditing(true);
-    setEditedUser(user);
-  };
+  const hasChanged = hasUserChanges(user, editedUser);
 
-  const stopEditing = () => {
-    setIsEditing(false);
-    setEditedUser(user);
-  };
-
-  const hasChanges = hasUserChanges(user, editedUser);
-
-  const editState = {
-    isEditing,
+  const { updateUser, isUpdating } = useUserEdit({
     editedUser,
-    setEditedUser,
-    stopEditing,
-    startEditing,
-    hasChanges,
+    onSuccessCallback: () => {
+      setIsEdit(false);
+      setValidationErrors({});
+    },
+  });
+
+  const config: ActionsConfig = {
+    isEdit,
+    onChange: setEditedUser,
+    errors: validationErrors,
   };
 
-  const handleSeePosts = () => {
-    navigate(`/users/${user.id}`);
-  };
+  const handlers = {
+    onEdit: () => {
+      setIsEdit(true);
+      setValidationErrors({});
+    },
+    onSave: () => {
+      const errors = validateUserFields(editedUser);
+      setValidationErrors(errors);
 
-  return (
-    <Card
-      title={
-        <span style={{ textAlign: "center", width: "106%", display: "block" }}>
-          {user.name}
-        </span>
+      if (Object.keys(errors).length === 0) {
+        updateUser();
       }
-      style={{ width: 1230, marginBottom: 20 }}
-      extra={
-        <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
-          <Button type="primary" onClick={handleSeePosts}>
+    },
+    onCancel: () => {
+      setEditedUser(user);
+      setIsEdit(false);
+      setValidationErrors({});
+    },
+  };
+
+  const items = [
+    {
+      key: "details",
+      label: <span style={{ fontSize: 16, fontWeight: 600 }}>{user.name}</span>,
+      children: <UserForm user={editedUser} config={config} />,
+      extra: (
+        <Space>
+          <EditUser
+            isEdit={isEdit}
+            hasChanged={hasChanged}
+            isLoading={isUpdating}
+            handlers={handlers}
+          />
+          <Button
+            type="primary"
+            onClick={(e) => {
+              e.stopPropagation();
+              navigate(`/users/${user.id}`);
+            }}
+          >
             See Posts
           </Button>
-        </div>
-      }
-    >
-      <Collapse
-        activeKey={panelOpen ? [user.id] : []}
-        onChange={(keys) =>
-          setPanelOpen(Array.isArray(keys) && keys.length > 0)
-        }
-        items={[
-          {
-            key: user.id,
-            label: (
-              <Button type="default" block style={{ textAlign: "left" }}>
-                {panelOpen ? "Hide Details" : "Show Details"}
-                
-              </Button>
-            ),
-            children: isEditing ? (
-              <div
-                style={{ display: "flex", flexDirection: "column", gap: 16 }}
-              >
-                <EditUser editState={editState} />
-                <UserEditMode user={editedUser} setEditedUser={setEditedUser} />
-              </div>
-            ) : (
-              <UserCard user={user} onEdit={startEditing} />
-            ),
-          },
-        ]}
-        ghost
-        expandIcon={() => null}
-      />
-    </Card>
+        </Space>
+      ),
+    },
+  ];
+
+  return (
+    <div style={{ width: 1230, marginBottom: 20 }}>
+      <Collapse items={items} />
+    </div>
   );
 }
