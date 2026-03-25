@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { message } from "antd";
-import { SINGLE_POST } from "../../constants";
+import { SINGLE_POST_URL } from "../../constants";
 import { deletePostFromList } from "../../postsSlice";
 import { useAppDispatch } from "../../../../../shared/hooks";
 
@@ -11,7 +11,7 @@ export function usePostDelete(postId: number) {
   const deletePost = async () => {
     setLoading(true);
     try {
-      const response = await fetch(SINGLE_POST(postId), {
+      const response = await fetch(SINGLE_POST_URL(postId), {
         method: "DELETE",
       });
 

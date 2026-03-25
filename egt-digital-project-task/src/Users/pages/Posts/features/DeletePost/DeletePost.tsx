@@ -16,7 +16,7 @@ export function DeletePost({ postId }: DeletePostProps) {
       okText="Yes"
       cancelText="No"
     >
-      <Button danger loading={loading} >
+      <Button danger loading={loading}>
         Delete
       </Button>
     </Popconfirm>

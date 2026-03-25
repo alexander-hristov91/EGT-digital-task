@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 import type { ActionsConfig, User } from "../../../shared/types";
 import { EditUser } from "../features/UpdateUser/EditUser";
 import { useUserEdit } from "../features/UpdateUser/useEditUser";
-
 import { hasUserChanges } from "../utils/compareUsers";
 import { validateUserFields } from "../utils/userFields";
 import { UserForm } from "./UserForm";

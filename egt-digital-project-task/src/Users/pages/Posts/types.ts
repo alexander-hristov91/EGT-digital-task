@@ -10,7 +10,6 @@ export interface PostsState {
   loading: boolean;
   error: string | null;
   hasFetched: boolean;
-
 }
 
 export interface EditStateProps {
@@ -19,10 +18,4 @@ export interface EditStateProps {
   setEditedPost: (post: Post) => void;
   stopEditing: (save?: boolean) => void;
   startEditing: () => void;
-}
-
-export interface ActionsConfig {
-  isEdit: boolean;
-  onChange?: (post: Post) => void;
-  errors?: Record<string, string>
 }

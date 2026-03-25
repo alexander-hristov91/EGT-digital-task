@@ -44,7 +44,7 @@ export default function UserPosts() {
       </div>
     );
   }
-  
+
   return (
     <div style={{ padding: 24 }}>
       <UserPostsButton />

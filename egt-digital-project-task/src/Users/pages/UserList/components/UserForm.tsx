@@ -1,8 +1,7 @@
-import { Col, Input, Row } from "antd";
+import { Col, Row } from "antd";
 import type { ActionsConfig, User } from "../../../shared/types";
-
 import { getUserFields, getUserFieldValue } from "../utils/userFields";
-import { FieldError } from "../../../shared/FieldError";
+import { FormInputField } from "../../../shared/FormInputField";
 
 interface UserFormProps {
   user: User;

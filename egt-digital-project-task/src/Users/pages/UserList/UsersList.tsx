@@ -27,7 +27,7 @@ export function UsersList() {
       </div>
     );
   }
-  
+
   return (
     <>
       <h2>Fetched Users: {userItems.length}</h2>

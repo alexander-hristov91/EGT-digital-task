@@ -3,7 +3,7 @@ import { useState } from "react";
 import { EditPost } from "../features/UpdatePost/EditPost";
 import { usePostEdit } from "../features/UpdatePost/usePostEdit";
 import { DeletePost } from "../features/DeletePost/DeletePost";
-import type {  Post } from "../types";
+import type { Post } from "../types";
 import { hasPostChanges } from "../utils/comparePosts";
 import { PostForm } from "./PostForm";
 import { validatePostFields } from "../utils/validatePostFields";

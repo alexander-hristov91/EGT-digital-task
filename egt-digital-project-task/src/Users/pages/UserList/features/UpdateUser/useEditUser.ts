@@ -18,8 +18,6 @@ export function useUserEdit({
   const [isUpdating, setIsUpdating] = useState<boolean>(false);
 
   const updateUser = useCallback(async () => {
-
-
     setIsUpdating(true);
     try {
       const response = await fetch(SINGLE_USER_URL(editedUser.id), {

@@ -16,5 +16,3 @@ export interface EditStateProps {
   startEditing: () => void;
   hasChanges: boolean;
 }
-
-

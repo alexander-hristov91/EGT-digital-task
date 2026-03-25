@@ -1,4 +1,4 @@
-import type {  Post } from "../types";
+import type { Post } from "../types";
 import { Input } from "antd";
 import { FormInputField } from "../../../shared/FormInputField";
 import { FieldError } from "../../../shared/FieldError";

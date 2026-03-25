@@ -2,7 +2,7 @@ import { useState } from "react";
 import { message } from "antd";
 import { useAppDispatch } from "../../../../../shared/hooks";
 import { updatePostInList } from "../../postsSlice";
-import { SINGLE_POST } from "../../constants";
+import { SINGLE_POST_URL } from "../../constants";
 import type { Post } from "../../types";
 
 interface UsePostEditOptions {
@@ -20,7 +20,7 @@ export function usePostEdit({
   const updatePost = async () => {
     setIsUpdating(true);
     try {
-      const response = await fetch(SINGLE_POST(editedPost.id), {
+      const response = await fetch(SINGLE_POST_URL(editedPost.id), {
         method: "PUT",
         body: JSON.stringify({
           id: editedPost.id,

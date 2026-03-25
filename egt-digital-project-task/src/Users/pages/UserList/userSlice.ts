@@ -37,13 +37,13 @@ const usersSlice = createSlice({
       state.error = action.payload;
     },
 
-    updateUserInList(state, action: { payload: { user: User }}) {
-       const index = state.userItems.findIndex(
+    updateUserInList(state, action: { payload: { user: User } }) {
+      const index = state.userItems.findIndex(
         (u) => u.id === action.payload.user.id,
-       );
-       if (index !== -1) {
+      );
+      if (index !== -1) {
         state.userItems[index] = action.payload.user;
-       }
+      }
     },
 
     resetUsersState() {
@@ -57,7 +57,7 @@ export const {
   fetchUsersSuccess,
   fetchUsersFailure,
   resetUsersState,
-  updateUserInList
+  updateUserInList,
 } = usersSlice.actions;
 
 export const { reducer: usersReducer } = usersSlice;

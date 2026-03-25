@@ -27,6 +27,3 @@ export interface ActionsConfig<T> {
   onChange?: (item: T) => void;
   errors?: Record<string, string>;
 }
-
-
-
