@@ -7,14 +7,8 @@ interface FormInputFieldProps {
   name: string;
   error?: string;
   isEdit: boolean;
-  onChange?: (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-  ) => void;
-  isTextArea?: boolean;
-  rows?: number;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
-
-const { TextArea } = Input;
 
 export function FormInputField({
   label,
@@ -23,38 +17,28 @@ export function FormInputField({
   error,
   isEdit,
   onChange,
-  isTextArea = false,
-  rows = 4,
 }: FormInputFieldProps) {
   if (!isEdit) {
     return (
       <div>
-        <strong>{label}:</strong> <span>{value || "-"}</span>
+        <strong>{label}</strong>
+        <div>{value || "-"}</div>
       </div>
     );
   }
 
   return (
     <div>
-      <div style={{ fontWeight: 500, marginBottom: 4 }}>{label}</div>
-      {isTextArea ? (
-        <TextArea
-          name={name}
-          value={value}
-          onChange={onChange}
-          size="small"
-          status={error ? "error" : undefined}
-          rows={rows}
-        />
-      ) : (
-        <Input
-          name={name}
-          value={value}
-          onChange={onChange}
-          size="small"
-          status={error ? "error" : undefined}
-        />
-      )}
+      <div>
+        <strong>{label}</strong>
+      </div>
+      <Input
+        name={name}
+        value={value}
+        onChange={onChange}
+        size="small"
+        status={error ? "error" : undefined}
+      />
       <FieldError error={error} />
     </div>
   );
