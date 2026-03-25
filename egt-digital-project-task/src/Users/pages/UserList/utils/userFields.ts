@@ -51,25 +51,24 @@ export function getUserFields(): UserFieldConfig[] {
 }
 
 export function getUserFieldValue(user: User, key: string): string {
-  return key.split('.').reduce((acc, part) => {
-    return acc[part];
-    // eslint-disable-next-line
-  }, user as any);
+  return key.split(".").reduce<unknown>((acc, part) => {
+    if (acc && typeof acc === "object" && part in acc) {
+      return (acc as Record<string, unknown>)[part];
+    }
+    return "";
+  }, user) as string;
 }
 
 export function validateUserFields(user: User): Record<string, string> {
-  return getUserFields().reduce(
-    (errors: Record<string, string>, field) => {
-      if (!field.validation) return errors;
+  return getUserFields().reduce((errors: Record<string, string>, field) => {
+    if (!field.validation) return errors;
 
-      const value = getUserFieldValue(user, field.key);
-      const errorMsg = field.validation(value);
+    const value = getUserFieldValue(user, field.key);
+    const errorMsg = field.validation(value);
 
-      if (errorMsg) {
-        errors[field.key] = errorMsg;
-      }
-      return errors;
-    },
-    {},
-  );
+    if (errorMsg) {
+      errors[field.key] = errorMsg;
+    }
+    return errors;
+  }, {});
 }
