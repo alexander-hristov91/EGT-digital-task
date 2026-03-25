@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState } from "react";
 import { message } from "antd";
 import { useAppDispatch } from "../../../../../shared/hooks";
 import { updatePostInList } from "../../postsSlice";
@@ -17,7 +17,7 @@ export function usePostEdit({
   const dispatch = useAppDispatch();
   const [isUpdating, setIsUpdating] = useState<boolean>(false);
 
-  const updatePost = useCallback(async () => {
+  const updatePost = async () => {
     setIsUpdating(true);
     try {
       const response = await fetch(SINGLE_POST(editedPost.id), {
@@ -50,7 +50,7 @@ export function usePostEdit({
     } finally {
       setIsUpdating(false);
     }
-  }, [dispatch, editedPost, onSuccessCallback]);
+  };
 
   return { updatePost, isUpdating };
 }

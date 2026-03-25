@@ -17,7 +17,4 @@ export interface EditStateProps {
   hasChanges: boolean;
 }
 
-export interface ActionsConfig {
-  isEdit: boolean;
-  onChange?: (user: User) => void;
-}
+

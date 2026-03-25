@@ -1,6 +1,6 @@
 import { Button, Space } from "antd";
 
-interface EditPostHandlers {
+interface EditPostActions {
   onEdit: () => void;
   onSave: () => void;
   onCancel: () => void;
@@ -10,7 +10,7 @@ interface EditPostProps {
   isEdit: boolean;
   hasChanged: boolean;
   isLoading: boolean;
-  handlers: EditPostHandlers;
+  handlers: EditPostActions;
 }
 
 export function EditPost({

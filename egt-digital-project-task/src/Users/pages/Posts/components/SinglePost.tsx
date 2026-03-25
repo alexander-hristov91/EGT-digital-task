@@ -3,10 +3,11 @@ import { useState } from "react";
 import { EditPost } from "../features/UpdatePost/EditPost";
 import { usePostEdit } from "../features/UpdatePost/usePostEdit";
 import { DeletePost } from "../features/DeletePost/DeletePost";
-import type { ActionsConfig, Post } from "../types";
+import type {  Post } from "../types";
 import { hasPostChanges } from "../utils/comparePosts";
 import { PostForm } from "./PostForm";
 import { validatePostFields } from "../utils/validatePostFields";
+import type { ActionsConfig } from "../../../shared/types";
 
 interface SinglePostProps {
   post: Post;
@@ -28,7 +29,7 @@ export default function SinglePost({ post }: SinglePostProps) {
     },
   });
 
-  const config: ActionsConfig = {
+  const config: ActionsConfig<Post> = {
     isEdit,
     onChange: setEditedPost,
     errors: validationErrors,
@@ -41,7 +42,7 @@ export default function SinglePost({ post }: SinglePostProps) {
     onSave: () => {
       const errors = validatePostFields(editedPost);
       setValidationErrors(errors);
-      if (Object.keys(errors).length === 0) {
+      if (!Object.keys(errors).length) {
         updatePost();
       }
     },

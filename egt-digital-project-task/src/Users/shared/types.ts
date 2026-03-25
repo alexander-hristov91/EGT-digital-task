@@ -22,7 +22,11 @@ export interface User {
   };
 }
 
-
+export interface ActionsConfig<T> {
+  isEdit: boolean;
+  onChange?: (item: T) => void;
+  errors?: Record<string, string>;
+}
 
 
 

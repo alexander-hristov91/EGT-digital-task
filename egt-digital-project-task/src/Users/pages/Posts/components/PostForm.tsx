@@ -1,9 +1,14 @@
-import type { ActionsConfig, Post } from "../types";
+import type {  Post } from "../types";
+import { Input } from "antd";
 import { FormInputField } from "../../../shared/FormInputField";
+import { FieldError } from "../../../shared/FieldError";
+import type { ActionsConfig } from "../../../shared/types";
+
+const { TextArea } = Input;
 
 interface PostFormProps {
   post: Post;
-  config: ActionsConfig;
+  config: ActionsConfig<Post>;
 }
 
 export function PostForm({ post, config }: PostFormProps) {
@@ -27,16 +32,27 @@ export function PostForm({ post, config }: PostFormProps) {
         isEdit={isEdit}
         onChange={handleChange}
       />
-      <FormInputField
-        label="Body"
-        value={post.body}
-        name="body"
-        error={errors?.body}
-        isEdit={isEdit}
-        onChange={handleChange}
-        isTextArea
-        rows={4}
-      />
+
+      <div>
+        <div>
+          <strong>Body</strong>
+        </div>
+        {isEdit ? (
+          <>
+            <TextArea
+              name="body"
+              value={post.body}
+              onChange={handleChange}
+              size="small"
+              status={errors?.body ? "error" : undefined}
+              rows={4}
+            />
+            <FieldError error={errors?.body} />
+          </>
+        ) : (
+          <div>{post.body || "-"}</div>
+        )}
+      </div>
     </div>
   );
 }

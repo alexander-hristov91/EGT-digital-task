@@ -1,10 +1,10 @@
 import { Button, Collapse, Space } from "antd";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import type { User } from "../../../shared/types";
+import type { ActionsConfig, User } from "../../../shared/types";
 import { EditUser } from "../features/UpdateUser/EditUser";
 import { useUserEdit } from "../features/UpdateUser/useEditUser";
-import type { ActionsConfig } from "../types";
+
 import { hasUserChanges } from "../utils/compareUsers";
 import { validateUserFields } from "../utils/userFields";
 import { UserForm } from "./UserForm";
@@ -29,7 +29,7 @@ export default function SingleUser({ user }: SingleUserProps) {
     },
   });
 
-  const config: ActionsConfig = {
+  const config: ActionsConfig<User> = {
     isEdit,
     onChange: setEditedUser,
   };

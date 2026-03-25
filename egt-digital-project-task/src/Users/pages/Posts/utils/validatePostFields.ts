@@ -9,7 +9,7 @@ export function validatePostFields(post: Post): Record<string, string> {
     errors.title = "Title is required";
   }
 
-  if (!post.body || !post.body.trim()) {
+  if (!post.body.trim()) {
     errors.body = "Body is required";
   }
 

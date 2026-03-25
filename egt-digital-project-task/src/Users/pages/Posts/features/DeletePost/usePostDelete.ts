@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState } from "react";
 import { message } from "antd";
 import { SINGLE_POST } from "../../constants";
 import { deletePostFromList } from "../../postsSlice";
@@ -8,7 +8,7 @@ export function usePostDelete(postId: number) {
   const dispatch = useAppDispatch();
   const [loading, setLoading] = useState<boolean>(false);
 
-  const deletePost = useCallback(async () => {
+  const deletePost = async () => {
     setLoading(true);
     try {
       const response = await fetch(SINGLE_POST(postId), {
@@ -29,7 +29,7 @@ export function usePostDelete(postId: number) {
     } finally {
       setLoading(false);
     }
-  }, [dispatch, postId]);
+  };
 
   return { deletePost, loading };
 }

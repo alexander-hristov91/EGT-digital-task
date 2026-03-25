@@ -1,12 +1,12 @@
 import { Col, Input, Row } from "antd";
-import type { User } from "../../../shared/types";
-import type { ActionsConfig } from "../types";
+import type { ActionsConfig, User } from "../../../shared/types";
+
 import { getUserFields, getUserFieldValue } from "../utils/userFields";
 import { FieldError } from "../../../shared/FieldError";
 
 interface UserFormProps {
   user: User;
-  config: ActionsConfig;
+  config: ActionsConfig<User>;
   errors?: Record<string, string>;
 }
 
