@@ -1,8 +1,8 @@
-import { useState } from "react";
 import { message } from "antd";
+import { useState } from "react";
 import { useAppDispatch } from "../../../../../shared/hooks";
-import { updatePostInList } from "../../postsSlice";
 import { SINGLE_POST_URL } from "../../constants";
+import { updatePostInList } from "../../postsSlice";
 import type { Post } from "../../types";
 
 interface UsePostEditOptions {
@@ -17,16 +17,18 @@ export function usePostEdit({
   const dispatch = useAppDispatch();
   const [isUpdating, setIsUpdating] = useState<boolean>(false);
 
-  const updatePost = async () => {
+  const updatePost = async (values?: Post) => {
     setIsUpdating(true);
+    const postData = values || editedPost;
+
     try {
-      const response = await fetch(SINGLE_POST_URL(editedPost.id), {
+      const response = await fetch(SINGLE_POST_URL(postData.id), {
         method: "PUT",
         body: JSON.stringify({
-          id: editedPost.id,
-          title: editedPost.title,
-          body: editedPost.body,
-          userId: editedPost.userId,
+          id: postData.id,
+          title: postData.title,
+          body: postData.body,
+          userId: postData.userId,
         }),
         headers: {
           "Content-type": "application/json; charset=UTF-8",

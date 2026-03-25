@@ -1,58 +1,61 @@
-import type { Post } from "../types";
-import { Input } from "antd";
-import { FormInputField } from "../../../shared/FormInputField";
-import { FieldError } from "../../../shared/FieldError";
-import type { ActionsConfig } from "../../../shared/types";
+import { Form, Input } from "antd";
 
 const { TextArea } = Input;
 
 interface PostFormProps {
-  post: Post;
-  config: ActionsConfig<Post>;
+  isEdit: boolean;
 }
 
-export function PostForm({ post, config }: PostFormProps) {
-  const { isEdit, onChange, errors } = config;
-
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-  ) => {
-    if (!onChange) return;
-    const { name, value } = e.target;
-    onChange({ ...post, [name]: value });
-  };
-
+export function PostForm({ isEdit }: PostFormProps) {
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-      <FormInputField
-        label="Title"
-        value={post.title}
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        gap: 16,
+        maxWidth: 500,
+        margin: "0 auto",
+      }}
+    >
+      <Form.Item name="id" hidden>
+        <Input />
+      </Form.Item>
+      <Form.Item
+        label={<strong>Title</strong>}
         name="title"
-        error={errors?.title}
-        isEdit={isEdit}
-        onChange={handleChange}
-      />
+        rules={[
+          {
+            required: true,
+            message: "Title is required",
+            validateTrigger: "onFinish",
+          },
+        ]}
+      >
+        <Input variant={isEdit ? "underlined" : "filled"} readOnly={!isEdit} />
+      </Form.Item>
 
-      <div>
-        <div>
-          <strong>Body</strong>
-        </div>
-        {isEdit ? (
-          <>
-            <TextArea
-              name="body"
-              value={post.body}
-              onChange={handleChange}
-              size="small"
-              status={errors?.body ? "error" : undefined}
-              rows={4}
-            />
-            <FieldError error={errors?.body} />
-          </>
-        ) : (
-          <div>{post.body || "-"}</div>
-        )}
-      </div>
+      <Form.Item
+        label={<strong>Body</strong>}
+        name="body"
+        rules={[
+          {
+            required: true,
+            message: "Body is required",
+            validateTrigger: "onFinish",
+          },
+        ]}
+      >
+        <TextArea
+          variant={isEdit ? "underlined" : "filled"}
+          readOnly={!isEdit}
+          size="small"
+          rows={4}
+        />
+      </Form.Item>
+
+      <Form.Item name="userId" hidden>
+        <Input />
+      </Form.Item>
     </div>
   );
 }
