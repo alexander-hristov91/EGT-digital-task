@@ -18,12 +18,7 @@ export default function SinglePost({ post }: SinglePostProps) {
   const formValues = Form.useWatch([], form);
   const hasChanged = hasPostChanges(post, formValues || post);
 
-  const { updatePost, isUpdating } = usePostEdit({
-    editedPost: form.getFieldsValue() as Post,
-    onSuccessCallback: () => {
-      setIsEdit(false);
-    },
-  });
+  const { updatePost, isUpdating } = usePostEdit();
 
   const handlers = {
     onEdit: () => {
@@ -39,7 +34,6 @@ export default function SinglePost({ post }: SinglePostProps) {
   };
 
   const onFinish = (values: Post) => {
-    console.log(values);
     updatePost(values);
   };
 

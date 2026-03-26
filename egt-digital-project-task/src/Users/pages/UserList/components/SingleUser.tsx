@@ -19,12 +19,7 @@ export default function SingleUser({ user }: SingleUserProps) {
   const formValues = Form.useWatch([], form);
   const hasChanged = hasUserChanges(user, formValues || user);
 
-  const { updateUser, isUpdating } = useUserEdit({
-    editedUser: form.getFieldsValue() as User,
-    onSuccessCallback: () => {
-      setIsEdit(false);
-    },
-  });
+  const { updateUser, isUpdating } = useUserEdit();
 
   const handlers = {
     onEdit: () => {

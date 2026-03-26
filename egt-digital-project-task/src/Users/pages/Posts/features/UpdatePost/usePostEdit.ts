@@ -5,21 +5,15 @@ import { SINGLE_POST_URL } from "../../constants";
 import { updatePostInList } from "../../postsSlice";
 import type { Post } from "../../types";
 
-interface UsePostEditOptions {
-  editedPost: Post;
-  onSuccessCallback?: (updatedPost: Post) => void;
-}
-
-export function usePostEdit({
-  editedPost,
-  onSuccessCallback,
-}: UsePostEditOptions) {
+export function usePostEdit() {
   const dispatch = useAppDispatch();
   const [isUpdating, setIsUpdating] = useState<boolean>(false);
 
-  const updatePost = async (values?: Post) => {
+  const updatePost = async (
+    postData: Post,
+    onSuccessCallback?: (updatedPost: Post) => void,
+  ) => {
     setIsUpdating(true);
-    const postData = values || editedPost;
 
     try {
       const response = await fetch(SINGLE_POST_URL(postData.id), {

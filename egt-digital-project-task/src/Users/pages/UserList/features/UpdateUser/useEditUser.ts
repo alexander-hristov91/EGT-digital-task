@@ -5,21 +5,15 @@ import { updateUserInList } from "../../userSlice";
 import { SINGLE_USER_URL } from "../../constants";
 import type { User } from "../../../../shared/types";
 
-interface UseUserEditOptions {
-  editedUser: User;
-  onSuccessCallback?: (updatedUser: User) => void;
-}
-
-export function useUserEdit({
-  editedUser,
-  onSuccessCallback,
-}: UseUserEditOptions) {
+export function useUserEdit() {
   const dispatch = useAppDispatch();
   const [isUpdating, setIsUpdating] = useState<boolean>(false);
 
-  const updateUser = async (values?: User) => {
+  const updateUser = async (
+    userData: User,
+    onSuccessCallback?: (updatedUser: User) => void,
+  ) => {
     setIsUpdating(true);
-    const userData = values || editedUser;
 
     try {
       const response = await fetch(SINGLE_USER_URL(userData.id), {

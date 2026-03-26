@@ -1,4 +1,4 @@
-import { Form, Input, Row } from "antd";
+import { Col, Form, Input, Row } from "antd";
 import { getUserFields } from "../utils/userFields";
 import type { User } from "../../../shared/types";
 
@@ -7,27 +7,17 @@ interface UserFormProps {
   user: User;
 }
 
-export function UserForm({ isEdit, user }: UserFormProps) {
+export function UserForm({ isEdit }: UserFormProps) {
   return (
-    <Row key={user.id} gutter={[12, 12]}>
+    <Row gutter={[16, 16]}>
       {getUserFields().map(({ key, label }) => {
+        const reactKey = Array.isArray(key) ? key.join(".") : key;
         return (
-          <div
-            key={key}
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              gap: 16,
-              maxWidth: 500,
-              margin: "0 auto",
-            }}
-          >
-            <Form.Item name="id" hidden>
-              <Input />
-            </Form.Item>
+          <Col span={12} key={reactKey}>
             <Form.Item
               label={<strong>{label}</strong>}
-              name={key.split(".")}
+              name={key}
+              style={{ marginBottom: 0 }}
               rules={[
                 {
                   required: true,
@@ -41,9 +31,12 @@ export function UserForm({ isEdit, user }: UserFormProps) {
                 readOnly={!isEdit}
               />
             </Form.Item>
-          </div>
+          </Col>
         );
       })}
+      <Form.Item name="id" hidden>
+        <Input />
+      </Form.Item>
     </Row>
   );
 }
