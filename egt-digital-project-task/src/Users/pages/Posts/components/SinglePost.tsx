@@ -1,13 +1,11 @@
-import { Collapse, Space } from "antd";
+import { Collapse, Form, Space } from "antd";
 import { useState } from "react";
+import { DeletePost } from "../features/DeletePost/DeletePost";
 import { EditPost } from "../features/UpdatePost/EditPost";
 import { usePostEdit } from "../features/UpdatePost/usePostEdit";
-import { DeletePost } from "../features/DeletePost/DeletePost";
 import type { Post } from "../types";
 import { hasPostChanges } from "../utils/comparePosts";
 import { PostForm } from "./PostForm";
-import { validatePostFields } from "../utils/validatePostFields";
-import type { ActionsConfig } from "../../../shared/types";
 
 interface SinglePostProps {
   post: Post;
@@ -15,42 +13,28 @@ interface SinglePostProps {
 
 export default function SinglePost({ post }: SinglePostProps) {
   const [isEdit, setIsEdit] = useState(false);
-  const [editedPost, setEditedPost] = useState<Post>(post);
-  const [validationErrors, setValidationErrors] = useState<
-    Record<string, string>
-  >({});
+  const [form] = Form.useForm<Post>();
 
-  const hasChanged = hasPostChanges(post, editedPost);
+  const formValues = Form.useWatch([], form);
+  const hasChanged = hasPostChanges(post, formValues || post);
 
-  const { updatePost, isUpdating } = usePostEdit({
-    editedPost,
-    onSuccessCallback: () => {
-      setIsEdit(false);
-    },
-  });
-
-  const config: ActionsConfig<Post> = {
-    isEdit,
-    onChange: setEditedPost,
-    errors: validationErrors,
-  };
+  const { updatePost, isUpdating } = usePostEdit();
 
   const handlers = {
     onEdit: () => {
       setIsEdit(true);
     },
     onSave: () => {
-      const errors = validatePostFields(editedPost);
-      setValidationErrors(errors);
-      if (!Object.keys(errors).length) {
-        updatePost();
-      }
+      form.submit();
     },
     onCancel: () => {
-      setEditedPost(post);
+      form.resetFields();
       setIsEdit(false);
-      setValidationErrors({});
     },
+  };
+
+  const onFinish = (values: Post) => {
+    updatePost(values);
   };
 
   const items = [
@@ -61,7 +45,16 @@ export default function SinglePost({ post }: SinglePostProps) {
           Post ID: {post.id}
         </span>
       ),
-      children: <PostForm post={editedPost} config={config} />,
+      children: (
+        <Form
+          form={form}
+          initialValues={post}
+          onFinish={onFinish}
+          layout="vertical"
+        >
+          <PostForm isEdit={isEdit} />
+        </Form>
+      ),
       extra: (
         <Space>
           <EditPost

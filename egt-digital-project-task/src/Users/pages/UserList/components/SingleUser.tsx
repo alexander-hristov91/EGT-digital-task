@@ -1,11 +1,10 @@
-import { Button, Collapse, Space } from "antd";
+import { Button, Collapse, Form, Space } from "antd";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import type { ActionsConfig, User } from "../../../shared/types";
+import type { User } from "../../../shared/types";
 import { EditUser } from "../features/UpdateUser/EditUser";
 import { useUserEdit } from "../features/UpdateUser/useEditUser";
 import { hasUserChanges } from "../utils/compareUsers";
-import { validateUserFields } from "../utils/userFields";
 import { UserForm } from "./UserForm";
 
 interface SingleUserProps {
@@ -13,54 +12,46 @@ interface SingleUserProps {
 }
 
 export default function SingleUser({ user }: SingleUserProps) {
-  const navigate = useNavigate();
   const [isEdit, setIsEdit] = useState(false);
-  const [editedUser, setEditedUser] = useState<User>(user);
-  const [validationErrors, setValidationErrors] = useState<
-    Record<string, string>
-  >({});
+  const navigate = useNavigate();
+  const [form] = Form.useForm<User>();
 
-  const hasChanged = hasUserChanges(user, editedUser);
+  const formValues = Form.useWatch([], form);
+  const hasChanged = hasUserChanges(user, formValues || user);
 
-  const { updateUser, isUpdating } = useUserEdit({
-    editedUser,
-    onSuccessCallback: () => {
-      setIsEdit(false);
-      setValidationErrors({});
-    },
-  });
-
-  const config: ActionsConfig<User> = {
-    isEdit,
-    onChange: setEditedUser,
-    errors: validationErrors,
-  };
+  const { updateUser, isUpdating } = useUserEdit();
 
   const handlers = {
     onEdit: () => {
       setIsEdit(true);
-      setValidationErrors({});
     },
     onSave: () => {
-      const errors = validateUserFields(editedUser);
-      setValidationErrors(errors);
-
-      if (Object.keys(errors).length === 0) {
-        updateUser();
-      }
+      form.submit();
     },
     onCancel: () => {
-      setEditedUser(user);
+      form.resetFields();
       setIsEdit(false);
-      setValidationErrors({});
     },
+  };
+
+  const onFinish = (values: User) => {
+    updateUser(values);
   };
 
   const items = [
     {
       key: "details",
       label: <span style={{ fontSize: 16, fontWeight: 600 }}>{user.name}</span>,
-      children: <UserForm user={editedUser} config={config} />,
+      children: (
+        <Form
+          form={form}
+          initialValues={user}
+          onFinish={onFinish}
+          layout="vertical"
+        >
+          <UserForm isEdit={isEdit} user={user} />
+        </Form>
+      ),
       extra: (
         <Space>
           <EditUser

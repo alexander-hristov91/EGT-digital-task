@@ -1,7 +1,5 @@
-import type { User } from "../../../shared/types";
-
 export interface UserFieldConfig {
-  key: string;
+  key: string | string[];
   label: string;
   validation?: (value: string) => string | undefined;
 }
@@ -11,64 +9,32 @@ export function getUserFields(): UserFieldConfig[] {
     {
       key: "username",
       label: "Username",
-      validation: (v) => (!v ? "Username Required" : undefined),
     },
     {
       key: "email",
       label: "Email",
-      validation: (v) =>
-        !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)
-          ? "Please enter a valid email..."
-          : undefined,
     },
     {
       key: "name",
       label: "Name",
-      validation: (v) => (!v ? "Name Required" : undefined),
     },
     {
-      key: "address.street",
+      key: ["address", "street"],
       label: "Street",
-      validation: (v) => (!v ? "Street Required" : undefined),
     },
     {
-      key: "address.suite",
+      key: ["address", "suite"],
       label: "Suite",
-      validation: (v) => (!v ? "Suite Required" : undefined),
     },
     {
-      key: "address.city",
+      key: ["address", "city"],
       label: "City",
-      validation: (v) => (!v ? "City Required" : undefined),
     },
-    { key: "address.zipcode", label: "ZipCode" },
+    { key: ["address", "zipcode"], label: "ZipCode" },
     { key: "phone", label: "Phone" },
     { key: "website", label: "Website" },
-    { key: "company.name", label: "CompanyName" },
-    { key: "company.catchPhrase", label: "CatchPhrase" },
-    { key: "company.bs", label: "CompanyBS" },
+    { key: ["company", "name"], label: "CompanyName" },
+    { key: ["company", "catchPhrase"], label: "CatchPhrase" },
+    { key: ["company", "bs"], label: "CompanyBS" },
   ];
-}
-
-export function getUserFieldValue(user: User, key: string): string {
-  return key.split(".").reduce<unknown>((acc, part) => {
-    if (acc && typeof acc === "object" && part in acc) {
-      return (acc as Record<string, unknown>)[part];
-    }
-    return "";
-  }, user) as string;
-}
-
-export function validateUserFields(user: User): Record<string, string> {
-  return getUserFields().reduce((errors: Record<string, string>, field) => {
-    if (!field.validation) return errors;
-
-    const value = getUserFieldValue(user, field.key);
-    const errorMsg = field.validation(value);
-
-    if (errorMsg) {
-      errors[field.key] = errorMsg;
-    }
-    return errors;
-  }, {});
 }

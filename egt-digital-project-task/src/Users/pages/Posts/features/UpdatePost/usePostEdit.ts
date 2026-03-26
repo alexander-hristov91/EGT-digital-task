@@ -1,32 +1,28 @@
-import { useState } from "react";
 import { message } from "antd";
+import { useState } from "react";
 import { useAppDispatch } from "../../../../../shared/hooks";
-import { updatePostInList } from "../../postsSlice";
 import { SINGLE_POST_URL } from "../../constants";
+import { updatePostInList } from "../../postsSlice";
 import type { Post } from "../../types";
 
-interface UsePostEditOptions {
-  editedPost: Post;
-  onSuccessCallback?: (updatedPost: Post) => void;
-}
-
-export function usePostEdit({
-  editedPost,
-  onSuccessCallback,
-}: UsePostEditOptions) {
+export function usePostEdit() {
   const dispatch = useAppDispatch();
   const [isUpdating, setIsUpdating] = useState<boolean>(false);
 
-  const updatePost = async () => {
+  const updatePost = async (
+    postData: Post,
+    onSuccessCallback?: (updatedPost: Post) => void,
+  ) => {
     setIsUpdating(true);
+
     try {
-      const response = await fetch(SINGLE_POST_URL(editedPost.id), {
+      const response = await fetch(SINGLE_POST_URL(postData.id), {
         method: "PUT",
         body: JSON.stringify({
-          id: editedPost.id,
-          title: editedPost.title,
-          body: editedPost.body,
-          userId: editedPost.userId,
+          id: postData.id,
+          title: postData.title,
+          body: postData.body,
+          userId: postData.userId,
         }),
         headers: {
           "Content-type": "application/json; charset=UTF-8",

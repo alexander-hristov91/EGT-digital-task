@@ -1,58 +1,42 @@
-import { Col, Row } from "antd";
-import type { ActionsConfig, User } from "../../../shared/types";
-import { getUserFields, getUserFieldValue } from "../utils/userFields";
-import { FormInputField } from "../../../shared/FormInputField";
+import { Col, Form, Input, Row } from "antd";
+import { getUserFields } from "../utils/userFields";
+import type { User } from "../../../shared/types";
 
 interface UserFormProps {
+  isEdit: boolean;
   user: User;
-  config: ActionsConfig<User>;
-  errors?: Record<string, string>;
 }
 
-export function UserForm({ user, config }: UserFormProps) {
-  const { isEdit, onChange, errors } = config;
-
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-  ) => {
-    if (!onChange) return;
-
-    const { name, value } = e.target;
-    const keys = name.split(".");
-
-    if (keys.length > 1) {
-      const [parent, child] = keys;
-      onChange({
-        ...user,
-        [parent]: {
-          ...(user[parent as keyof User] as object),
-          [child]: value,
-        },
-      });
-    } else {
-      onChange({ ...user, [name]: value });
-    }
-  };
-
+export function UserForm({ isEdit }: UserFormProps) {
   return (
-    <Row gutter={[12, 12]}>
+    <Row gutter={[16, 16]}>
       {getUserFields().map(({ key, label }) => {
-        const value = getUserFieldValue(user, key);
-        const error = errors?.[key];
-
+        const reactKey = Array.isArray(key) ? key.join(".") : key;
         return (
-          <Col xs={24} lg={8} key={key} style={{ marginBottom: 16 }}>
-            <FormInputField
-              label={label}
-              value={value}
+          <Col span={12} key={reactKey}>
+            <Form.Item
+              label={<strong>{label}</strong>}
               name={key}
-              error={error}
-              isEdit={isEdit}
-              onChange={handleChange}
-            />
+              style={{ marginBottom: 0 }}
+              rules={[
+                {
+                  required: true,
+                  message: `${label} is required`,
+                  validateTrigger: "onFinish",
+                },
+              ]}
+            >
+              <Input
+                variant={isEdit ? "underlined" : "filled"}
+                readOnly={!isEdit}
+              />
+            </Form.Item>
           </Col>
         );
       })}
+      <Form.Item name="id" hidden>
+        <Input />
+      </Form.Item>
     </Row>
   );
 }
