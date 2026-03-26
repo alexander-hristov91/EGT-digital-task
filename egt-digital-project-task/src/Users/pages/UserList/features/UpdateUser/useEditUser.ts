@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState } from "react";
 import { message } from "antd";
 import { useAppDispatch } from "../../../../../shared/hooks";
 import { updateUserInList } from "../../userSlice";
@@ -17,12 +17,14 @@ export function useUserEdit({
   const dispatch = useAppDispatch();
   const [isUpdating, setIsUpdating] = useState<boolean>(false);
 
-  const updateUser = useCallback(async () => {
+  const updateUser = async (values?: User) => {
     setIsUpdating(true);
+    const userData = values || editedUser;
+
     try {
-      const response = await fetch(SINGLE_USER_URL(editedUser.id), {
+      const response = await fetch(SINGLE_USER_URL(userData.id), {
         method: "PATCH",
-        body: JSON.stringify(editedUser),
+        body: JSON.stringify(userData),
         headers: {
           "Content-type": "application/json; charset=UTF-8",
         },
@@ -45,7 +47,7 @@ export function useUserEdit({
     } finally {
       setIsUpdating(false);
     }
-  }, [dispatch, editedUser, onSuccessCallback]);
+  };
 
   return { updateUser, isUpdating };
 }
